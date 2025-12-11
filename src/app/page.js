@@ -10,25 +10,6 @@ import Hero from './components/Hero'
 import Verticals from './components/Verticals'
 
 export default function OneSmiteLanding() {
-
-    //   const NAV_ITEMS = [
-    //     { id: 'about', label: 'About' },
-    //     { id: 'verticals', label: 'Verticals' },
-    //     { id: 'rd', label: 'R&D Focus' },
-    //     { id: 'vision', label: 'Vision 2035' },
-    //     { id: 'contact', label: 'Connect' },
-    // ]
-
-    // const [mobileOpen, setMobileOpen] = useState(false)
-
-    // const scrollToSection = (id) => {
-    //     const el = document.getElementById(id)
-    //     if (!el) return
-    //     const y = el.getBoundingClientRect().top + window.scrollY - 80
-    //     window.scrollTo({ top: y, behavior: 'smooth' })
-    //     setMobileOpen(false)
-    // }
-
   return (
     <div className="min-h-screen bg-slate-950 text-slate-50">
       {/* Background effects */}

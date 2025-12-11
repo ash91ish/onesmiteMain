@@ -1,6 +1,7 @@
 'use client'
 import { motion } from 'framer-motion'
 import { ArrowRight, Atom, Brain, Cpu, Globe2, Layers, LineChart, ShieldCheck, TestTube2 } from 'lucide-react'
+import { scrollToSection } from '../utils/scroll'
 
 export default function Hero() {
     const fadeInUp = {
@@ -39,14 +40,16 @@ export default function Hero() {
                     variants={fadeInUp}
                     className="max-w-xl text-sm leading-relaxed text-slate-300 sm:text-[15px]"
                 >
-                    OneSmite is an independent deep-tech umbrella focused on building
+                    OneSmite is an independent deep-tech organisation focused on building
                     <span className="font-semibold text-slate-100">
                         {' '}real, production-ready systems
                     </span>{' '}
-                    across education, applied AI, robotics, and future propulsion.
-                    We don’t publish concepts — we deploy infrastructure that people,
-                    institutions, and enterprises actively use.
+                    across education technology, applied AI, automation, and long-horizon
+                    robotics research. Our work is grounded in a product-first engineering
+                    approach — not theoretical concepts, but resilient digital infrastructure
+                    designed for practical use by learners, institutions, and enterprises.
                 </motion.p>
+
 
                 {/* Primary CTAs */}
                 <motion.div
@@ -54,12 +57,13 @@ export default function Hero() {
                     className="flex flex-wrap items-center gap-4"
                 >
                     <a
-                        href="https://edu.onesmite.com"
+                        href="#"
                         className="inline-flex items-center gap-2 rounded-full bg-cyan-500 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 shadow-[0_10px_40px_rgba(8,145,178,0.7)] transition hover:-translate-y-0.5 hover:bg-cyan-400"
                     >
-                        Launch Onesmite Edu
+                        Beta Coming Soon
                         <ArrowRight className="h-4 w-4" />
                     </a>
+
 
                     <button
                         onClick={() => scrollToSection('verticals')}

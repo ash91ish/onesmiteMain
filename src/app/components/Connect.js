@@ -153,12 +153,13 @@ const Connect = () => {
 
                         <div className="mt-5 flex flex-wrap items-center gap-3">
                             <a
-                                href="https://edu.onesmite.com"
+                                href="#"
                                 className="inline-flex items-center gap-2 rounded-full bg-cyan-500 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 shadow-[0_10px_40px_rgba(8,145,178,0.7)] transition hover:-translate-y-0.5 hover:bg-cyan-400"
                             >
-                                Go to Onesmite Edu
+                                Onesmite Edu • Coming Soon
                                 <ArrowRight className="h-4 w-4" />
                             </a>
+
 
                             <a
                                 href="mailto:contact@onesmite.com"

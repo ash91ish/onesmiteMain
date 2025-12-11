@@ -6,23 +6,23 @@ export default function About() {
             </h2>
 
             <div className="grid gap-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)] md:items-start">
+
                 <p className="text-sm leading-relaxed text-slate-300">
-                    OneSmite is an independent research-driven technology umbrella focused on
+                    OneSmite is a research-led technology company focused on
                     <span className="font-semibold text-slate-100">
-                        {' '}building deep-tech products that actually ship and sustain in the real world
-                    </span>{' '}
-                    — beginning with education, expanding into applied artificial intelligence,
-                    and advancing toward robotics and propulsion systems. Unlike concept-only
-                    research houses, OneSmite operates on a
-                    <span className="font-semibold text-slate-100">
-                        {' '}product-first R&D model
-                    </span>{' '}
-                    where revenue, data, and real-world usage continuously shape long-term
-                    technological innovation.
+                        {' '}designing and delivering deep-tech systems that operate at real-world scale
+                    </span>.
+                    Our work begins with education technology and extends into applied artificial
+                    intelligence, automation, and long-horizon robotics and propulsion research.
                     <br /><br />
-                    Every Onesmite system is engineered with national-scale resilience,
-                    export-ready infrastructure, and long-term maintainability as first-class
-                    design parameters — not afterthoughts.
+                    The organisation follows a disciplined
+                    <span className="font-semibold text-slate-100"> product-first R&D approach </span>
+                    where every research direction is validated through measurable deployments,
+                    revenue-driven sustainability, and continuous feedback from real users.
+                    <br /><br />
+                    All Onesmite platforms are engineered with a focus on reliability,
+                    long-term maintainability, security, and national-scale usability — ensuring
+                    that the systems built today can evolve into tomorrow’s infrastructure.
                 </p>
 
                 <div className="rounded-2xl border border-white/10 bg-slate-900/60 p-4 text-xs text-slate-300">
@@ -31,16 +31,15 @@ export default function About() {
                     </div>
 
                     <ul className="space-y-1.5">
-                        <li>• Ship measurable products before publishing futuristic claims.</li>
-                        <li>• Engineer for horizontal scale, auditability, and fault isolation.</li>
-                        <li>• Keep humans, ethics, and governance at the center of automation.</li>
-                        <li>• Use live revenue to fund frontier research — not speculation.</li>
-                        <li>• Build India-first systems with global competitiveness.</li>
+                        <li>• Build validated products before expanding into new domains.</li>
+                        <li>• Engineer for scale, robustness, and operational auditability.</li>
+                        <li>• Maintain responsible, human-centric automation practices.</li>
+                        <li>• Fund long-term research through sustainable product growth.</li>
+                        <li>• Develop India-first systems with global performance standards.</li>
                     </ul>
 
-                    {/* Added credibility strip */}
                     <div className="mt-3 text-[10px] uppercase tracking-[0.22em] text-slate-500">
-                        Product-Driven • Research-Backed • Long-Horizon Engineering
+                        Product-Focused • Research-Driven • Engineering Excellence
                     </div>
                 </div>
             </div>
