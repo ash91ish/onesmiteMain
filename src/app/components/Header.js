@@ -29,11 +29,12 @@ export default function Header() {
                     className="flex cursor-pointer items-center gap-2"
                     onClick={() => scrollToSection('top')}
                 >
-                    <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-cyan-500 to-fuchsia-500 shadow-lg shadow-cyan-500/40">
+                    {/* <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-linear-to-br from-cyan-500 to-fuchsia-500 shadow-lg shadow-cyan-500/40">
                         <span className="text-xs font-semibold tracking-[0.18em]">
                             OS
                         </span>
-                    </div>
+                    </div> */}
+                    <img src="/onesmite.webp" alt="" height={30} width={35}/>
                     <div className="leading-tight">
                         <div className="text-sm font-semibold tracking-[0.22em] text-slate-200">
                             ONESMITE

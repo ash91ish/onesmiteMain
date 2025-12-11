@@ -90,7 +90,7 @@ const Connect = () => {
             </section>
 
             {/* Self-Independent India + Strategic Mission */}
-            <section className="space-y-6 rounded-3xl border border-white/10 bg-gradient-to-r from-emerald-900/20 to-cyan-900/20 p-8">
+            <section className="space-y-6 rounded-3xl border border-white/10 bg-linear-to-r from-emerald-900/20 to-cyan-900/20 p-8">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <h2 className="text-sm font-semibold uppercase tracking-[0.25em] text-slate-300">
                         ONESMITE & SELF-INDEPENDENT INDIA
