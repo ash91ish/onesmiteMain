@@ -19,6 +19,13 @@
   }
 }
 
+.card {
+  @apply rounded-xl border border-white/10 bg-slate-900/70 p-6 text-sm text-slate-300 transition hover:border-cyan-400;
+}
+.card h3 {
+  @apply mt-3 mb-2 text-white font-semibold;
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
