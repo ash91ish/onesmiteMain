@@ -13,66 +13,88 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport = {
+  themeColor: "#020617", // slate-950 to match your background
+};
+
 export const metadata = {
-  title: "Onesmite — Research-Driven Deep-Tech Technologies",
+  title: "Onesmite | Research-Driven Deep-Tech Technologies",
   description:
-    "Onesmite is a research-led deep-tech organisation building scalable systems across education technology, applied AI, automation, and long-horizon robotics research. Engineered in India for global performance.",
+    "Onesmite operates as a parent research organization designing deep-tech and AI systems for the future. From educational SaaS to applied artificial intelligence, massive automation, and long-horizon physical tech.",
   keywords: [
     "Onesmite",
-    "deep tech",
-    "AI systems",
-    "education technology",
-    "R&D",
-    "automation",
-    "robotics",
-    "SaaS infrastructure",
-    "India tech",
+    "Onesmite Educa",
+    "Deep-tech research organization",
+    "AI systems design",
+    "Educational SaaS",
+    "Applied artificial intelligence",
+    "Massive automation",
+    "Long-horizon physical tech",
+    "Zero-trust reliability",
+    "National-scale fault tolerance",
+    "India-origin tech",
+    "Scalable future infrastructure",
   ],
-  authors: [{ name: "Onesmite Research & Futures Lab" }],
+  authors: [{ name: "Onesmite Labs" }],
   creator: "Onesmite",
   publisher: "Onesmite",
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   metadataBase: new URL("https://onesmite.com"),
+  alternates: {
+    canonical: "/",
+  },
+  verification: {
+    google: "your-google-site-verification-id", // Add your verification ID here
+  },
   openGraph: {
-    title: "Onesmite — Research-Driven Deep-Tech Technologies",
+    title: "Onesmite | Future Tech & Applied Intelligence",
     description:
-      "Building production-ready systems across EduTech, AI, automation, and future robotics with a product-first engineering approach.",
+      "A frontier deep-tech research company building production-ready future tech with absolute focus on zero-trust reliability and national-scale fault tolerance.",
     url: "https://onesmite.com",
     siteName: "Onesmite",
     images: [
       {
-        url: "/onesmite-og.webp",
+        url: "/onesmite-og.webp", // Ensure this high-quality 1200x630 image exists!
         width: 1200,
         height: 630,
-        alt: "Onesmite Logo",
+        alt: "Onesmite Labs Structure",
       },
     ],
     locale: "en_US",
     type: "website",
   },
-  icons: {
-    icon: "/favicon.ico",
-    shortcut: "/favicon.ico",
-    apple: "/favicon.ico",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
   },
   twitter: {
     card: "summary_large_image",
-    title: "Onesmite — Research-Driven Deep-Tech Technologies",
+    title: "Onesmite | Engineeering Excellence",
     description:
-      "Building production-ready systems across EduTech, AI, automation, and future robotics with a product-first engineering approach.",
+      "We build the architecture today that will run tomorrow's infrastructure. Research-driven, product-focused deep-tech design.",
     images: [
       {
         url: "/onesmite-og.webp",
         width: 1200,
         height: 630,
-        alt: "Onesmite Logo",
+        alt: "Onesmite Systems",
       },
     ],
     creator: "@onesmite",
     site: "@onesmite",
-    handle: "@onesmite",
   },
-  // manifest: "/site.webmanifest",
-
+  category: "technology",
 };
 
 export default function RootLayout({ children }) {
