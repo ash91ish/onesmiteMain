@@ -1,206 +1,279 @@
 'use client'
 import { motion } from 'framer-motion'
-import { ArrowRight, Atom, Brain, Cpu, Globe2, Layers, LineChart, ShieldCheck, TestTube2 } from 'lucide-react'
-import { scrollToSection } from '../utils/scroll'
+import { Atom, Brain, Cpu, TerminalSquare, ShieldCheck, Activity, Zap, Database, Network } from 'lucide-react'
+import Link from 'next/link'
+import { useEffect, useState } from 'react'
 
 export default function Hero() {
-    const fadeInUp = {
-        hidden: { opacity: 0, y: 24 },
-        visible: { opacity: 1, y: 0 },
+    const [scrambleText, setScrambleText] = useState('INITIALIZING_SYSTEM...')
+
+    // Simple matrix typing effect for the hero sub-text
+    useEffect(() => {
+        const textToType = "SECURE PROTOCOL ENGAGED // PRODUCTION-READY SYSTEMS ONLINE // STANDBY FOR R&D UPLINK..."
+        let currentText = ""
+        let i = 0
+        const interval = setInterval(() => {
+            currentText += textToType.charAt(i)
+            setScrambleText(currentText)
+            i++
+            if (i === textToType.length) clearInterval(interval)
+        }, 50)
+        return () => clearInterval(interval)
+    }, [])
+
+    const containerVariants = {
+        hidden: { opacity: 0 },
+        visible: {
+            opacity: 1,
+            transition: { staggerChildren: 0.1, delayChildren: 0.2 }
+        }
+    }
+
+    const itemVariants = {
+        hidden: { opacity: 0, y: 20 },
+        visible: { opacity: 1, y: 0, transition: { type: 'spring', stiffness: 100 } }
     }
 
     return (
-        <section className="grid gap-10 md:grid-cols-[minmax(0,1.3fr)_minmax(0,1fr)] md:items-center">
-            <motion.div
-                initial="hidden"
-                animate="visible"
-                transition={{ staggerChildren: 0.12 }}
-                className="space-y-7"
-            >
+        <section className="relative min-h-[85vh] flex items-center pt-20 pb-10">
+            {/* Ambient cyber glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-cyan-900/10 blur-[120px] pointer-events-none rounded-full" />
+
+            <div className="w-full grid gap-12 lg:grid-cols-[1.2fr_1fr] items-center relative z-10">
+
+                {/* Left Column: Mission Control */}
                 <motion.div
-                    variants={fadeInUp}
-                    className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[11px] font-medium tracking-[0.2em] text-slate-200"
+                    variants={containerVariants}
+                    initial="hidden"
+                    animate="visible"
+                    className="space-y-8"
                 >
-                    <span className="inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
-                    ADVANCED R&D • PRODUCT-FIRST ENGINEERING
-                </motion.div>
-
-                <motion.h1
-                    variants={fadeInUp}
-                    className="text-balance text-3xl font-semibold tracking-tight text-slate-50 sm:text-4xl lg:text-5xl"
-                >
-                    Designing the systems
-                    <span className="bg-linear-to-r from-cyan-300 via-sky-400 to-fuchsia-400 bg-clip-text text-transparent">
-                        {' '}
-                        that will run tomorrow.
-                    </span>
-                </motion.h1>
-
-                <motion.p
-                    variants={fadeInUp}
-                    className="max-w-xl text-sm leading-relaxed text-slate-300 sm:text-[15px]"
-                >
-                    OneSmite is an independent deep-tech organisation focused on building
-                    <span className="font-semibold text-slate-100">
-                        {' '}real, production-ready systems
-                    </span>{' '}
-                    across education technology, applied AI, automation, and long-horizon
-                    robotics research. Our work is grounded in a product-first engineering
-                    approach — not theoretical concepts, but resilient digital infrastructure
-                    designed for practical use by learners, institutions, and enterprises.
-                </motion.p>
-
-
-                {/* Primary CTAs */}
-                <motion.div
-                    variants={fadeInUp}
-                    className="flex flex-wrap items-center gap-4"
-                >
-                    <a
-                        href="#"
-                        className="inline-flex items-center gap-2 rounded-full bg-cyan-500 px-5 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 shadow-[0_10px_40px_rgba(8,145,178,0.7)] transition hover:-translate-y-0.5 hover:bg-cyan-400"
-                    >
-                        Beta Coming Soon
-                        <ArrowRight className="h-4 w-4" />
-                    </a>
-
-
-                    <button
-                        onClick={() => scrollToSection('verticals')}
-                        className="inline-flex items-center gap-2 text-xs font-medium text-slate-200 hover:text-slate-50"
-                    >
-                        Explore R&D verticals
-                        <span className="flex h-6 w-6 items-center justify-center rounded-full border border-white/15 bg-white/5 text-[11px]">
-                            ↓
-                        </span>
-                    </button>
-                </motion.div>
-
-                {/* Trust & Scale Signals */}
-                <motion.div
-                    variants={fadeInUp}
-                    className="flex flex-wrap gap-4 text-[11px] text-slate-400"
-                >
-                    <div className="flex items-center gap-2">
-                        <ShieldCheck className="h-4 w-4 text-emerald-400" />
-                        <span>Live deployments • Not lab demos</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <Globe2 className="h-4 w-4 text-cyan-400" />
-                        <span>India-built • Globally aligned</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                        <LineChart className="h-4 w-4 text-fuchsia-400" />
-                        <span>Designed for scale, funding & export</span>
-                    </div>
-                </motion.div>
-
-                {/* Added Institutional Signal */}
-                <motion.div
-                    variants={fadeInUp}
-                    className="text-[10px] uppercase tracking-[0.22em] text-slate-500"
-                >
-                    Independent R&D • Product-Backed Innovation • Long-Horizon Engineering
-                </motion.div>
-            </motion.div>
-
-            {/* Right hero visual */}
-            <motion.div
-                initial={{ opacity: 0, x: 40 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ type: 'spring', stiffness: 80, delay: 0.1 }}
-                className="relative"
-            >
-                <div className="relative overflow-hidden rounded-3xl border border-white/10 bg-white/5 p-5 shadow-[0_20px_80px_rgba(15,23,42,0.85)]">
-                    <div className="mb-4 flex items-center justify-between text-[11px] text-slate-300">
-                        <span className="inline-flex items-center gap-2">
-                            <span className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-900">
-                                <Cpu className="h-3.5 w-3.5 text-cyan-300" />
-                            </span>
-                            ONESMITE • SYSTEMS VIEW
-                        </span>
-                        <span className="rounded-full bg-slate-900/80 px-2 py-1 text-[10px] uppercase tracking-[0.18em] text-slate-400">
-                            ACTIVE STACK
-                        </span>
-                    </div>
-
-                    <div className="grid gap-3 text-xs text-slate-200">
-                        <div className="flex items-center justify-between rounded-2xl bg-slate-900/70 px-4 py-3">
-                            <div className="flex items-center gap-3">
-                                <div className="flex h-8 w-8 items-center justify-center rounded-xl bg-cyan-500/15">
-                                    <Layers className="h-4 w-4 text-cyan-300" />
-                                </div>
-                                <div>
-                                    <div className="text-[11px] uppercase tracking-[0.18em] text-slate-400">
-                                        LAYER 1
-                                    </div>
-                                    <div className="text-[13px] font-semibold">
-                                        Infrastructure & Platforms
-                                    </div>
-                                </div>
-                            </div>
-                            {/* <span className="text-[11px] text-emerald-300">
-            Live • Onesmite Edu
-          </span> */}
-                            <span className="text-[11px] text-amber-300">
-                                Coming Soon • Onesmite Edu
-                            </span>
-
-
+                    {/* Status Badge */}
+                    <motion.div variants={itemVariants} className="inline-flex items-center gap-3 border border-emerald-900/50 bg-emerald-950/20 px-4 py-2 text-[10px] font-mono tracking-widest text-emerald-400 uppercase">
+                        <div className="relative flex h-2 w-2">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
                         </div>
+                        SYS.STATUS: OPTIMAL [R&D ACTIVE]
+                    </motion.div>
 
-                        <div className="grid gap-2 rounded-2xl bg-slate-900/60 p-4">
-                            <div className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-slate-400">
-                                PIPELINE
-                                <span className="h-px flex-1 bg-linear-to-r from-slate-500/50 via-cyan-400/70 to-fuchsia-400/60" />
-                            </div>
-
-                            <div className="grid gap-2.5 text-[11px] sm:grid-cols-2">
-                                <div className="flex items-start gap-2">
-                                    <div className="mt-0.5 flex h-6 w-6 items-center justify-center rounded-lg bg-fuchsia-500/10">
-                                        <Brain className="h-3.5 w-3.5 text-fuchsia-300" />
-                                    </div>
-                                    <div>
-                                        <div className="font-semibold text-slate-100">
-                                            Applied AI Systems
-                                        </div>
-                                        <div className="text-[11px] text-slate-400">
-                                            Recommendation engines, decision support, and
-                                            automation layers powering real workflows.
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="flex items-start gap-2">
-                                    <div className="mt-0.5 flex h-6 w-6 items-center justify-center rounded-lg bg-cyan-500/10">
-                                        <Atom className="h-3.5 w-3.5 text-cyan-300" />
-                                    </div>
-                                    <div>
-                                        <div className="font-semibold text-slate-100">
-                                            Robotics & Propulsion (Future)
-                                        </div>
-                                        <div className="text-[11px] text-slate-400">
-                                            High-thrust, low-noise tech and adaptive humanoid
-                                            systems, activated after SaaS scale.
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center justify-between rounded-2xl bg-linear-to-r from-cyan-500/15 via-slate-900/80 to-fuchsia-500/15 px-4 py-3 text-[11px]">
-                            <div className="flex items-center gap-2 text-slate-200">
-                                <TestTube2 className="h-4 w-4 text-emerald-300" />
-                                <span>“Prototype → Users → Data → Iterate → Scale”</span>
-                            </div>
-                            <span className="hidden rounded-full bg-slate-950/70 px-2 py-1 text-[10px] text-cyan-200 sm:inline">
-                                Onesmite Method
+                    {/* Main Headline */}
+                    <motion.div variants={itemVariants} className="space-y-2">
+                        <h1 className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tight text-white uppercase leading-[0.9]">
+                            Constructing
+                            <br />
+                            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-sky-300 to-fuchsia-400 text-glow-sm">
+                                Tomorrow's
                             </span>
+                            <br />
+                            Infrastructure.
+                        </h1>
+                    </motion.div>
+
+                    {/* Cyber Text Stream */}
+                    <motion.div variants={itemVariants} className="font-mono text-xs text-cyan-500/80 h-4 uppercase tracking-[0.2em]">
+                        {scrambleText} <span className="animate-pulse">_</span>
+                    </motion.div>
+
+                    {/* Description */}
+                    <motion.p variants={itemVariants} className="max-w-xl text-sm leading-relaxed text-slate-400 font-mono tracking-wide">
+                        <span className="text-cyan-400 font-bold">&gt; ONESMITE_LABS:</span> A frontier deep-tech and AI research parent company. We build <span className="text-white bg-white/10 px-1">production-ready future tech</span>, where platforms like our Educational SaaS are just the first deployed nodes in a larger ecosystem of applied intelligence and long-horizon physical systems.
+                    </motion.p>
+
+                    {/* HUD Action Buttons */}
+                    <motion.div variants={itemVariants} className="flex flex-wrap items-center gap-6 pt-4">
+                        <Link href="/research" className="group relative px-6 py-3 bg-cyan-950/30 border border-cyan-500/50 hover:bg-cyan-900/40 hover:border-cyan-300 transition-all shadow-[0_0_20px_rgba(34,211,238,0.1)] overflow-hidden flex items-center gap-3">
+                            <div className="absolute inset-0 w-1 bg-cyan-400 group-hover:w-full transition-all duration-300 opacity-20" />
+                            <Activity className="h-4 w-4 text-cyan-400 relative z-10 group-hover:animate-pulse" />
+                            <span className="text-xs font-mono font-bold tracking-widest text-cyan-100 relative z-10 uppercase">
+                                Init sequence
+                            </span>
+                        </Link>
+
+                        <Link href="/verticals" className="group flex items-center gap-2 text-xs font-mono tracking-widest text-slate-500 hover:text-cyan-400 transition-colors uppercase">
+                            <TerminalSquare className="h-4 w-4 opacity-50 group-hover:opacity-100 transition-opacity" />
+                            [ View Active Nodes ]
+                        </Link>
+                    </motion.div>
+
+                    {/* Data Points */}
+                    <motion.div variants={itemVariants} className="grid grid-cols-2 md:grid-cols-3 gap-4 pt-10 border-t border-slate-800/50">
+                        <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-1.5 text-[9px] font-mono text-cyan-500 uppercase tracking-widest">
+                                <Activity className="h-3 w-3" /> Ops
+                            </div>
+                            <div className="text-xs font-bold text-slate-200">LIVE.DEPLOYS</div>
                         </div>
+                        <div className="flex flex-col gap-1">
+                            <div className="flex items-center gap-1.5 text-[9px] font-mono text-fuchsia-500 uppercase tracking-widest">
+                                <ShieldCheck className="h-3 w-3" /> Sec
+                            </div>
+                            <div className="text-xs font-bold text-slate-200">ZERO.TRUST_ARCH</div>
+                        </div>
+                        <div className="flex flex-col gap-1 md:block hidden">
+                            <div className="flex items-center gap-1.5 text-[9px] font-mono text-emerald-500 uppercase tracking-widest">
+                                <Zap className="h-3 w-3" /> Perf
+                            </div>
+                            <div className="text-xs font-bold text-slate-200">SCALE.INFINITE</div>
+                        </div>
+                    </motion.div>
+                </motion.div>
+
+                {/* Right Column: Deep AI Data Visualization */}
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 1, ease: "easeOut", delay: 0.5 }}
+                    className="relative flex items-center justify-center w-full mt-10 lg:mt-0 h-[350px] sm:h-[450px] lg:h-auto lg:aspect-square overflow-hidden lg:overflow-visible"
+                >
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[450px] h-[450px] flex items-center justify-center scale-[0.65] sm:scale-[0.85] lg:scale-100">
+                        {/* Outer Containment Field */}
+                        <motion.div
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+                            className="absolute w-full h-full border border-cyan-900/20 rounded-full"
+                            style={{ borderStyle: 'dashed', borderWidth: '1px' }}
+                        />
+                        <motion.div
+                            animate={{ rotate: -360 }}
+                            transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+                            className="absolute w-[380px] h-[380px] border border-fuchsia-900/20 rounded-full"
+                            style={{ borderTopWidth: '2px', borderBottomWidth: '2px', borderStyle: 'solid' }}
+                        />
+
+                        {/* Central Cognitive Core */}
+                        <motion.div
+                            animate={{ scale: [1, 1.05, 1], opacity: [0.8, 1, 0.8] }}
+                            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                            className="absolute z-20 w-36 h-36 bg-slate-950/80 backdrop-blur-md border border-fuchsia-500/40 rounded-full shadow-[0_0_50px_rgba(217,70,239,0.2)] flex flex-col items-center justify-center gap-2 overflow-hidden"
+                        >
+                            <motion.div
+                                animate={{ rotate: -360 }}
+                                transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
+                                className="absolute inset-2 border-2 border-dashed border-cyan-500/30 rounded-full"
+                            />
+                            <Brain className="h-8 w-8 text-fuchsia-400 animate-pulse relative z-10" />
+                            <div className="text-center font-mono relative z-10">
+                                <div className="text-[9px] text-cyan-400 tracking-[0.3em] font-bold">NEURAL_CORE</div>
+                                <div className="text-xs font-bold text-white tracking-widest text-glow-sm">v_0.2</div>
+                            </div>
+                        </motion.div>
+
+                        {/* Neural Synapse Connections (SVG) */}
+                        <svg className="absolute inset-0 w-full h-full pointer-events-none z-10" viewBox="0 0 450 450">
+                            {/* Line to Top Left */}
+                            <motion.path
+                                d="M225,225 L100,100"
+                                stroke="rgba(34, 211, 238, 0.4)"
+                                strokeWidth="2"
+                                fill="none"
+                                initial={{ pathLength: 0 }}
+                                animate={{ pathLength: [0, 1, 1, 0] }}
+                                transition={{ duration: 4, repeat: Infinity, times: [0, 0.4, 0.6, 1], ease: "easeInOut" }}
+                            />
+                            {/* Line to Top Right */}
+                            <motion.path
+                                d="M225,225 L350,120"
+                                stroke="rgba(217, 70, 239, 0.4)"
+                                strokeWidth="2"
+                                fill="none"
+                                initial={{ pathLength: 0 }}
+                                animate={{ pathLength: [0, 1, 1, 0] }}
+                                transition={{ duration: 5, repeat: Infinity, times: [0, 0.4, 0.6, 1], ease: "easeInOut", delay: 1 }}
+                            />
+                            {/* Line to Bottom Left */}
+                            <motion.path
+                                d="M225,225 L120,350"
+                                stroke="rgba(16, 185, 129, 0.4)"
+                                strokeWidth="2"
+                                fill="none"
+                                initial={{ pathLength: 0 }}
+                                animate={{ pathLength: [0, 1, 1, 0] }}
+                                transition={{ duration: 4.5, repeat: Infinity, times: [0, 0.4, 0.6, 1], ease: "easeInOut", delay: 0.5 }}
+                            />
+                            {/* Line to Bottom Right */}
+                            <motion.path
+                                d="M225,225 L320,320"
+                                stroke="rgba(34, 211, 238, 0.4)"
+                                strokeWidth="2"
+                                fill="none"
+                                initial={{ pathLength: 0 }}
+                                animate={{ pathLength: [0, 1, 1, 0] }}
+                                transition={{ duration: 5.5, repeat: Infinity, times: [0, 0.4, 0.6, 1], ease: "easeInOut", delay: 1.5 }}
+                            />
+                        </svg>
+
+                        {/* Floating Nodes */}
+                        {/* Top Left Node */}
+                        <motion.div
+                            animate={{ y: [0, -10, 0] }}
+                            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+                            className="absolute z-20 top-[60px] left-[20px] bg-slate-900/90 backdrop-blur-md border border-cyan-500/50 pr-6 p-3 shadow-[0_0_20px_rgba(34,211,238,0.15)] rounded-l-none border-l-4 border-l-cyan-400"
+                        >
+                            <div className="text-[8px] font-mono text-cyan-500/80 uppercase tracking-widest mb-1">Process Node</div>
+                            <div className="text-[10px] font-bold text-white uppercase tracking-wider flex items-center gap-2 font-mono">
+                                <Network className="h-3 w-3 text-cyan-400" />
+                                Model.Train
+                            </div>
+                        </motion.div>
+
+                        {/* Top Right Node */}
+                        <motion.div
+                            animate={{ y: [0, 15, 0] }}
+                            transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                            className="absolute z-20 top-[80px] right-[10px] bg-slate-900/90 backdrop-blur-md border border-fuchsia-500/50 pl-6 p-3 shadow-[0_0_20px_rgba(217,70,239,0.15)] rounded-r-none border-r-4 border-r-fuchsia-400"
+                        >
+                            <div className="text-[8px] font-mono text-fuchsia-500/80 uppercase tracking-widest mb-1 text-right">Inference Node</div>
+                            <div className="text-[10px] font-bold text-white uppercase tracking-wider flex items-center justify-end gap-2 font-mono">
+                                Predict.Engine
+                                <Cpu className="h-3 w-3 text-fuchsia-400" />
+                            </div>
+                        </motion.div>
+
+                        {/* Bottom Left Node */}
+                        <motion.div
+                            animate={{ y: [0, -8, 0] }}
+                            transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2 }}
+                            className="absolute z-20 bottom-[80px] left-[30px] bg-slate-900/90 backdrop-blur-md border border-emerald-500/50 pr-6 p-3 shadow-[0_0_20px_rgba(16,185,129,0.15)] rounded-l-none border-l-4 border-l-emerald-400"
+                        >
+                            <div className="text-[8px] font-mono text-emerald-500/80 uppercase tracking-widest mb-1">Data Pipeline</div>
+                            <div className="text-[10px] font-bold text-white uppercase tracking-wider flex items-center gap-2 font-mono">
+                                <Database className="h-3 w-3 text-emerald-400" />
+                                Vector.Store
+                            </div>
+                        </motion.div>
+
+                        {/* Bottom Right Node */}
+                        <motion.div
+                            animate={{ y: [0, 10, 0] }}
+                            transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+                            className="absolute z-20 bottom-[100px] right-[40px] bg-slate-900/90 backdrop-blur-md border border-slate-600 p-2 shadow-lg"
+                        >
+                            <div className="flex items-center gap-2 text-[10px] font-mono font-bold text-slate-300 tracking-widest uppercase">
+                                <Atom className="h-4 w-4 text-cyan-500/70" />
+                                Async.Ops
+                            </div>
+                            {/* Processing bar */}
+                            <div className="mt-2 w-full h-1 bg-slate-800 overflow-hidden relative">
+                                <motion.div
+                                    animate={{ x: ["-100%", "100%"] }}
+                                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                    className="absolute inset-y-0 left-0 w-1/2 bg-cyan-500/50"
+                                />
+                            </div>
+                        </motion.div>
+
                     </div>
-                </div>
-            </motion.div>
+                </motion.div>
+            </div>
+
+            <style jsx global>{`
+                @keyframes scan {
+                    0% { transform: translateY(-50px); opacity: 0; }
+                    50% { opacity: 1; }
+                    100% { transform: translateY(200px); opacity: 0; }
+                }
+            `}</style>
         </section>
-
     )
 }
