@@ -18,11 +18,11 @@ export const viewport = {
 };
 
 export const metadata = {
-  title: "Onesmite | Research-Driven Deep-Tech Technologies",
+  title: "Onesmite™ | Research-Driven Deep-Tech Technologies",
   description:
     "Onesmite operates as a parent research organization designing deep-tech and AI systems for the future. From educational SaaS to applied artificial intelligence, massive automation, and long-horizon physical tech.",
   keywords: [
-    "Onesmite",
+    "Onesmite™",
     "Onesmite Educa",
     "Deep-tech research organization",
     "AI systems design",
@@ -51,7 +51,7 @@ export const metadata = {
     google: "your-google-site-verification-id", // Add your verification ID here
   },
   openGraph: {
-    title: "Onesmite | Future Tech & Applied Intelligence",
+    title: "Onesmite™ | Future Tech & Applied Intelligence",
     description:
       "A frontier deep-tech research company building production-ready future tech with absolute focus on zero-trust reliability and national-scale fault tolerance.",
     url: "https://onesmite.com",
@@ -80,7 +80,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Onesmite | Engineeering Excellence",
+    title: "Onesmite™ | Engineeering Excellence",
     description:
       "We build the architecture today that will run tomorrow's infrastructure. Research-driven, product-focused deep-tech design.",
     images: [

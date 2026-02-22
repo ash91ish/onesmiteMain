@@ -1,9 +1,10 @@
 'use client'
 import { useState } from 'react'
-import { Menu, X, Terminal, ChevronRight } from 'lucide-react'
+import { Menu, X, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
+import Image from 'next/image'
 
 export default function Header() {
     const pathname = usePathname()
@@ -29,16 +30,16 @@ export default function Header() {
 
                     {/* Logo */}
                     <Link href="/" className="flex items-center gap-3 group">
-                        <div className="relative flex h-9 w-9 items-center justify-center bg-cyan-950/50 border border-cyan-800/50 group-hover:border-cyan-400/80 transition-colors">
-                            <Terminal className="h-4 w-4 text-cyan-400 group-hover:text-cyan-300 group-hover:drop-shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                            <div className="absolute -bottom-1 -right-1 w-1.5 h-1.5 bg-fuchsia-500 animate-pulse" />
+                        <div className="relative flex h-9 w-9 items-center justify-center bg-cyan-950/50 border border-cyan-800/50 group-hover:border-cyan-400/80 transition-colors overflow-hidden">
+                            <Image src="/onesmite.webp" alt="Onesmite" width={36} height={36} className="object-cover w-full h-full" />
+                            <div className="absolute -bottom-1 -right-1 w-1.5 h-1.5 bg-fuchsia-500 animate-pulse z-10" />
                         </div>
                         <div className="leading-tight">
                             <div className="text-[13px] font-bold tracking-[0.3em] text-slate-100 group-hover:text-white transition-colors">
-                                ONESMITE
+                                ONESMITE™
                             </div>
                             <div className="text-[9px] uppercase tracking-[0.4em] text-cyan-500/80 font-mono">
-                                R&D_TERMINAL
+                                RESEARCH & INTELLIGENCE
                             </div>
                         </div>
                     </Link>
