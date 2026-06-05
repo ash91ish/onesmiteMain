@@ -26,7 +26,7 @@ export default function About() {
       </SectionWrapper>
 
       {/* Cards */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-[1px] bg-border border border-border">
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-1 bg-border border border-border">
         {/* Onesmite Educa Card */}
         <SectionWrapper delay={100}>
           <div className="card h-full border-none rounded-none flex flex-col">
