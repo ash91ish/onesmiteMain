@@ -13,13 +13,7 @@ export default function sitemap() {
             priority: 0.8,
         },
         {
-            url: 'https://onesmite.com/research',
-            lastModified: new Date(),
-            changeFrequency: 'weekly',
-            priority: 0.8,
-        },
-        {
-            url: 'https://onesmite.com/verticals',
+            url: 'https://onesmite.com/products',
             lastModified: new Date(),
             changeFrequency: 'weekly',
             priority: 0.8,

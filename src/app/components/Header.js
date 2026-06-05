@@ -1,156 +1,255 @@
 'use client'
-import { useState } from 'react'
-import { Menu, X, ChevronRight } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import { motion, AnimatePresence } from 'framer-motion'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+import { Menu, X, ArrowUpRight, ChevronRight } from 'lucide-react'
+
+const NAV_ITEMS = [
+  { href: '/',         label: 'Home' },
+  { href: '/about',    label: 'About' },
+  { href: '/products', label: 'Products' },
+  { href: '/contact',  label: 'Contact' },
+]
 
 export default function Header() {
-    const pathname = usePathname()
-    const NAV_ITEMS = [
-        { href: '/', label: 'SYS.HOME' },
-        { href: '/about', label: 'DOSSIER' },
-        { href: '/research', label: 'CORE.TECH' },
-        { href: '/verticals', label: 'NODES' },
-        { href: '/contact', label: 'UPLINK' },
-    ]
+  const pathname = usePathname()
+  const [mobileOpen, setMobileOpen] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
+  const [mounted, setMounted] = useState(false)
 
-    const [mobileOpen, setMobileOpen] = useState(false)
+  // Wait until client mount before rendering portal
+  useEffect(() => { setMounted(true) }, [])
 
-    return (
-        <header className="sticky top-0 z-50 p-4 pointer-events-none">
-            {/* The actual navbar is a floating pill inside the header area */}
-            <div className="mx-auto max-w-6xl pointer-events-auto">
-                <div className="relative flex items-center justify-between border border-cyan-900/50 bg-[#020617]/80 backdrop-blur-md px-4 py-3 shadow-[0_0_30px_rgba(8,145,178,0.15)] overflow-hidden">
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12)
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
-                    {/* Decorative cyber corner accents */}
-                    <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-cyan-500" />
-                    <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-cyan-500" />
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => { document.body.style.overflow = '' }
+  }, [mobileOpen])
 
-                    {/* Logo */}
-                    <Link href="/" className="flex items-center gap-3 group">
-                        <div className="relative flex h-9 w-9 items-center justify-center bg-cyan-950/50 border border-cyan-800/50 group-hover:border-cyan-400/80 transition-colors overflow-hidden">
-                            <Image src="/onesmite.webp" alt="Onesmite" width={36} height={36} className="object-cover w-full h-full" />
-                            <div className="absolute -bottom-1 -right-1 w-1.5 h-1.5 bg-fuchsia-500 animate-pulse z-10" />
-                        </div>
-                        <div className="leading-tight">
-                            <div className="text-[13px] font-bold tracking-[0.3em] text-slate-100 group-hover:text-white transition-colors">
-                                ONESMITE™
-                            </div>
-                            <div className="text-[9px] uppercase tracking-[0.4em] text-cyan-500/80 font-mono">
-                                RESEARCH & INTELLIGENCE
-                            </div>
-                        </div>
-                    </Link>
+  // Close on route change
+  useEffect(() => { setMobileOpen(false) }, [pathname])
 
-                    {/* Desktop nav */}
-                    <nav className="hidden items-center gap-6 text-[11px] font-mono tracking-widest text-slate-400 md:flex">
-                        {NAV_ITEMS.map((item) => {
-                            const isActive = pathname === item.href
-                            return (
-                                <Link
-                                    key={item.href}
-                                    href={item.href}
-                                    className={`relative group px-2 py-1 transition-colors ${isActive ? 'text-cyan-300' : 'hover:text-cyan-100'}`}
-                                >
-                                    <span className="relative z-10 flex items-center gap-1">
-                                        {isActive && <ChevronRight className="h-3 w-3 text-cyan-500" />}
-                                        {item.label}
-                                    </span>
-                                    {isActive && (
-                                        <motion.div
-                                            layoutId="navIndicator"
-                                            className="absolute inset-0 bg-cyan-950/40 border-b-2 border-cyan-400 z-0"
-                                            initial={false}
-                                            transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                                        />
-                                    )}
-                                    {/* Hover bracket effect */}
-                                    <span className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 opacity-0 group-hover:opacity-100 group-hover:-translate-x-1 transition-all text-cyan-500/50">[</span>
-                                    <span className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all text-cyan-500/50">]</span>
-                                </Link>
-                            )
-                        })}
+  const mobileMenuPortal = mounted ? createPortal(
+    <>
+      {/* Full-page backdrop — lives at body level, truly covers everything */}
+      <div
+        onClick={() => setMobileOpen(false)}
+        aria-hidden="true"
+        style={{
+          position: 'fixed',
+          inset: 0,
+          top: '72px',
+          zIndex: 90,
+          backgroundColor: 'rgba(0,0,0,0.55)',
+          backdropFilter: mobileOpen ? 'blur(8px)' : 'none',
+          WebkitBackdropFilter: mobileOpen ? 'blur(8px)' : 'none',
+          opacity: mobileOpen ? 1 : 0,
+          visibility: mobileOpen ? 'visible' : 'hidden',
+          transition: 'opacity 300ms ease, backdrop-filter 300ms ease',
+        }}
+      />
 
-                        <div className="h-4 w-px bg-cyan-900/50 ml-2" />
+      {/* Drawer — slides down from top */}
+      <div
+        aria-hidden={!mobileOpen}
+        style={{
+          position: 'fixed',
+          top: '72px',
+          left: 0,
+          right: 0,
+          zIndex: 95,
+          overflow: 'hidden',
+          maxHeight: mobileOpen ? '600px' : '0px',
+          opacity: mobileOpen ? 1 : 0,
+          visibility: mobileOpen ? 'visible' : 'hidden',
+          transition: 'max-height 380ms cubic-bezier(0.16,1,0.3,1), opacity 250ms ease, visibility 0ms',
+        }}
+      >
+        <div
+          style={{
+            background: 'rgba(10,10,18,0.98)',
+            backdropFilter: 'blur(24px)',
+            WebkitBackdropFilter: 'blur(24px)',
+            borderBottom: '1px solid rgba(255,255,255,0.07)',
+            boxShadow: '0 24px 48px rgba(0,0,0,0.6)',
+          }}
+        >
+          <div className="max-w-[1200px] mx-auto px-6 py-6 pb-8 flex flex-col gap-6">
 
-                        <a
-                            href="#"
-                            className="group relative inline-flex items-center gap-2 overflow-hidden border border-cyan-500/30 bg-cyan-950/20 px-4 py-1.5 text-[10px] font-bold tracking-widest text-cyan-300 transition-all hover:border-cyan-400 hover:bg-cyan-900/40 hover:shadow-[0_0_20px_rgba(34,211,238,0.2)]"
-                        >
-                            <span className="absolute inset-x-0 bottom-0 h-[1px] bg-gradient-to-r from-transparent via-cyan-400 to-transparent translate-x-[-100%] group-hover:animate-[shimmer_1s_infinite]" />
-                            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                            EDU.SYS // OFFLINE
-                        </a>
-                    </nav>
+            {/* Nav Links */}
+            <nav aria-label="Mobile navigation" className="flex flex-col gap-1">
+              {NAV_ITEMS.map((item, i) => {
+                const isActive = pathname === item.href
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileOpen(false)}
+                    className={`group flex items-center justify-between px-4 py-3.5 rounded-xl text-[0.9375rem] font-medium no-underline transition-all duration-200 ${
+                      isActive
+                        ? 'text-white bg-white/[0.08] border border-white/[0.08]'
+                        : 'text-white/50 hover:text-white hover:bg-white/[0.04] border border-transparent'
+                    }`}
+                    style={{
+                      transitionDelay: mobileOpen ? `${i * 40}ms` : '0ms',
+                    }}
+                  >
+                    <span>{item.label}</span>
+                    <ChevronRight
+                      size={15}
+                      className={`transition-all duration-200 ${
+                        isActive ? 'text-accent opacity-100' : 'opacity-0 group-hover:opacity-40 -translate-x-1 group-hover:translate-x-0'
+                      }`}
+                    />
+                  </Link>
+                )
+              })}
+            </nav>
 
-                    {/* Mobile button */}
-                    <button
-                        className="inline-flex items-center justify-center p-2 text-cyan-500 md:hidden hover:bg-cyan-950/50 active:scale-95 transition border border-transparent hover:border-cyan-900/50"
-                        onClick={() => setMobileOpen((prev) => !prev)}
-                        aria-label="Toggle navigation"
-                    >
-                        {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-                    </button>
+            {/* Divider */}
+            <div className="h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+            {/* Bottom Section */}
+            <div className="flex flex-col gap-4">
+              {/* Status Row */}
+              <div className="flex items-center justify-between px-1">
+                <div className="flex flex-col">
+                  <span className="text-[0.6875rem] font-mono text-white/30 uppercase tracking-[0.1em]">Platform Status</span>
                 </div>
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/20 bg-emerald-500/[0.08]">
+                  <span className="w-1.5 h-1.5 bg-emerald-400 rounded-full animate-pulse" />
+                  <span className="font-mono text-[0.6875rem] font-semibold text-emerald-400 tracking-[0.06em]">OPERATIONAL</span>
+                </div>
+              </div>
 
-                {/* Mobile nav panel */}
-                <AnimatePresence>
-                    {mobileOpen && (
-                        <motion.div
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="mt-2 border border-cyan-900/50 bg-[#020617]/95 backdrop-blur-xl p-4 md:hidden shadow-[0_10px_40px_rgba(0,0,0,0.8)] pointer-events-auto relative overflow-hidden"
-                        >
-                            {/* Scanning line effect */}
-                            <div className="absolute top-0 left-0 w-full h-0.5 bg-cyan-500/30 animate-[scan_2s_ease-in-out_infinite]" />
-
-                            <nav className="flex flex-col gap-1 font-mono text-[11px] tracking-widest">
-                                {NAV_ITEMS.map((item) => {
-                                    const isActive = pathname === item.href
-                                    return (
-                                        <Link
-                                            key={item.href}
-                                            href={item.href}
-                                            onClick={() => setMobileOpen(false)}
-                                            className={`w-full flex items-center justify-between px-4 py-3 transition-colors ${isActive ? 'bg-cyan-950/50 text-cyan-300 border-l-2 border-cyan-400' : 'text-slate-400 hover:bg-white/5 hover:text-cyan-100'}`}
-                                        >
-                                            <span className="flex items-center gap-2">
-                                                {isActive && <ChevronRight className="h-3 w-3" />}
-                                                {item.label}
-                                            </span>
-                                            {isActive && <div className="text-[9px] text-cyan-500/50" >ACTIVE</div>}
-                                        </Link>
-                                    )
-                                })}
-                                <div className="mt-4 pt-4 border-t border-cyan-900/30">
-                                    <a
-                                        href="#"
-                                        className="w-full inline-flex items-center justify-center gap-2 border border-cyan-500/30 bg-cyan-950/20 px-4 py-3 text-[10px] font-bold tracking-widest text-cyan-300"
-                                    >
-                                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                                        EDU.SYS_OFFLINE
-                                    </a>
-                                </div>
-                            </nav>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
+              {/* CTA */}
+              <a
+                href="https://edu.onesmite.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 py-3.5 bg-accent text-white text-[0.875rem] font-semibold no-underline rounded-xl border border-white/10 transition-all duration-200 active:scale-[0.98]"
+                style={{ boxShadow: '0 0 20px rgba(92,107,255,0.3), inset 0 1px 0 rgba(255,255,255,0.1)' }}
+              >
+                Open Onesmite Educa
+                <ArrowUpRight size={15} />
+              </a>
             </div>
+          </div>
+        </div>
+      </div>
+    </>,
+    document.body
+  ) : null
 
-            <style jsx global>{`
-                @keyframes shimmer {
-                    100% { transform: translateX(100%); }
-                }
-                @keyframes scan {
-                    0% { transform: translateY(0); opacity: 0; }
-                    10% { opacity: 1; }
-                    90% { opacity: 1; }
-                    100% { transform: translateY(1000%); opacity: 0; }
-                }
-            `}</style>
-        </header>
-    )
+  return (
+    <>
+      <header
+        className={`sticky top-0 z-[100] backdrop-blur-md transition-all duration-300 ease-out border-b ${
+          scrolled
+            ? 'border-white/[0.06] bg-[#0a0a0f]/80'
+            : 'border-white/[0.02] bg-[#0a0a0f]/30'
+        }`}
+      >
+        <div className="max-w-[1200px] mx-auto px-6 flex items-center justify-between h-[72px]">
+
+          {/* Logo */}
+          <Link
+            href="/"
+            className="flex items-center gap-3 no-underline transition-opacity duration-200 hover:opacity-80"
+            aria-label="Onesmite — Home"
+          >
+            <div className="relative w-8 h-8 rounded-lg overflow-hidden border border-white/10 bg-white/[0.03] shadow-[0_2px_8px_rgba(0,0,0,0.3)]">
+              <Image src="/onesmite.webp" alt="Onesmite Logo" fill className="object-cover" sizes="32px" priority />
+            </div>
+            <div className="flex flex-col">
+              <span className="font-heading text-[1.0625rem] font-bold text-primary tracking-[-0.01em] leading-[1.2]">
+                Onesmite
+              </span>
+              <span className="font-mono text-[0.625rem] text-muted tracking-[0.05em] uppercase leading-none">
+                Technology Holding co.
+              </span>
+            </div>
+          </Link>
+
+          {/* Desktop Pill Nav */}
+          <nav
+            aria-label="Primary navigation"
+            className="hidden md:flex items-center gap-1 bg-white/[0.03] border border-white/5 rounded-full px-1.5 py-1 shadow-[0_4px_12px_rgba(0,0,0,0.1)]"
+          >
+            {NAV_ITEMS.map((item) => {
+              const isActive = pathname === item.href
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={`text-[0.8125rem] font-medium px-3.5 py-1.5 no-underline rounded-full transition-all duration-200 border ${
+                    isActive
+                      ? 'text-primary bg-white/10 border-white/5'
+                      : 'text-muted bg-transparent border-transparent hover-nav-item'
+                  }`}
+                >
+                  {item.label}
+                </Link>
+              )
+            })}
+          </nav>
+
+          {/* Desktop Right Side */}
+          <div className="hidden md:flex items-center gap-5">
+            <div className="flex items-center gap-2 font-mono text-[0.6875rem] text-emerald-500 bg-emerald-500/[0.06] px-2.5 py-1 rounded-full border border-emerald-500/10">
+              <span className="w-1.5 h-1.5 bg-emerald-500 rounded-full inline-block animate-pulse" />
+              SYS: ACTIVE
+            </div>
+            <a
+              href="https://edu.onesmite.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 text-[0.8125rem] font-semibold px-4 py-2 bg-accent text-white no-underline rounded-lg border border-white/10 shadow-[0_0_12px_rgba(92,107,255,0.2)] transition-all duration-200 hover:bg-[#4A59E8] hover:-translate-y-[1px] hover:shadow-[0_0_16px_rgba(92,107,255,0.35)]"
+            >
+              Onesmite Educa
+              <ArrowUpRight size={13} />
+            </a>
+          </div>
+
+          {/* Mobile Hamburger */}
+          <button
+            className={`md:hidden relative flex items-center justify-center w-9 h-9 cursor-pointer rounded-lg transition-all duration-200 border ${
+              mobileOpen
+                ? 'bg-white/[0.06] border-white/10 text-white'
+                : 'bg-white/[0.02] border-border text-primary hover:bg-white/[0.04]'
+            }`}
+            onClick={() => setMobileOpen((p) => !p)}
+            aria-label={mobileOpen ? 'Close navigation menu' : 'Open navigation menu'}
+            aria-expanded={mobileOpen}
+          >
+            <span
+              className={`absolute transition-all duration-200 ${mobileOpen ? 'opacity-100 rotate-0' : 'opacity-0 rotate-90'}`}
+            >
+              <X size={18} />
+            </span>
+            <span
+              className={`absolute transition-all duration-200 ${mobileOpen ? 'opacity-0 -rotate-90' : 'opacity-100 rotate-0'}`}
+            >
+              <Menu size={18} />
+            </span>
+          </button>
+        </div>
+      </header>
+
+      {/* Portal: Backdrop + Drawer rendered at document.body */}
+      {mobileMenuPortal}
+    </>
+  )
 }
