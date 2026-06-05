@@ -67,7 +67,7 @@ export default function Hero() {
             </div>
 
             {/* Headline */}
-            <h1 className="font-heading text-[26px] md:text-[38px] lg:text-[42px] xl:text-[56px] 2xl:text-[66px] font-extrabold leading-[1.2] tracking-[-0.03em] text-primary mb-7">
+            <h1 className="font-heading text-[25px] md:text-[38px] lg:text-[42px] xl:text-[56px] 2xl:text-[66px] font-extrabold leading-[1.2] tracking-[-0.03em] text-primary mb-7">
               Building India's{' '}
               <span className="inline-grid relative overflow-hidden h-[1.2em] align-top text-left">
                 <span className="invisible opacity-0 col-start-1 row-start-1 pointer-events-none select-none whitespace-nowrap pb-1">

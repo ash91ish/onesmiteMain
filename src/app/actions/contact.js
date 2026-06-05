@@ -51,8 +51,8 @@ export async function submitContactForm(formData) {
     ])
 
     if (error) {
-      console.error('Supabase error submitting contact:', error)
-      return { success: false, error: 'Failed to save submission.' }
+      console.error('Supabase insert error — code:', error.code, '| message:', error.message, '| details:', error.details, '| hint:', error.hint)
+      return { success: false, error: `DB error: ${error.message} (code: ${error.code})` }
     }
 
     return { success: true }
