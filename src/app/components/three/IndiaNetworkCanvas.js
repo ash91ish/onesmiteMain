@@ -163,8 +163,8 @@ function DatacenterFloor() {
       <planeGeometry args={[100, 100]} />
       {/* A dark, highly reflective surface to mirror the servers and AI core */}
       <MeshReflectorMaterial
-        blur={[400, 100]}
-        resolution={512}
+        blur={[300, 100]}
+        resolution={256}
         mixBlur={1}
         mixStrength={15}
         roughness={0.4}
@@ -252,7 +252,7 @@ export default function IndiaNetworkCanvas() {
   return (
     <Canvas
       camera={{ position: [0, 1.5, 4], fov: 50 }}
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
       gl={{ antialias: true, alpha: true }}
       style={{ background: 'transparent' }}
     >

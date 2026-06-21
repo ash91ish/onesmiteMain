@@ -121,7 +121,7 @@ export default function WhyOnesmiteSection() {
           }}
         >
           {/* Left: headline + quote */}
-          <div ref={headRef} style={{ position: 'sticky', top: '120px' }}>
+          <div ref={headRef} className="lg:sticky lg:top-[120px]">
             <motion.span
               className="eyebrow eyebrow-dark"
               initial={{ opacity: 0, y: 16 }}

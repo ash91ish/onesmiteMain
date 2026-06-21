@@ -149,6 +149,7 @@ export default function TimelineCanvas() {
     <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
       <Canvas
         camera={{ position: [0, 0, 20], fov: 45 }}
+        dpr={[1, 1.5]}
         gl={{ antialias: true, alpha: true }}
       >
         <BrainVines />

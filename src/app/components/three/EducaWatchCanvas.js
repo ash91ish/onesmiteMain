@@ -200,7 +200,7 @@ function LuxuryWatch() {
 
         {/* ── CASE BODY – visible steel/gunmetal ── */}
         <mesh>
-          <cylinderGeometry args={[1.72, 1.72, 0.38, 128]} />
+          <cylinderGeometry args={[1.72, 1.72, 0.38, 64]} />
           <meshPhysicalMaterial
             color="#2a3a4a"
             metalness={1}
@@ -212,7 +212,7 @@ function LuxuryWatch() {
 
         {/* ── DIAL FACE – dark navy with subtle sheen ── */}
         <mesh position={[0, 0.2, 0]} rotation={[-Math.PI / 2, 0, 0]}>
-          <circleGeometry args={[1.68, 128]} />
+          <circleGeometry args={[1.68, 64]} />
           <meshPhysicalMaterial
             color="#0b1e30"
             metalness={0.3}
@@ -224,7 +224,7 @@ function LuxuryWatch() {
 
         {/* ── OUTER BEZEL – thick polished gold/steel ── */}
         <mesh ref={outerBezelRef} position={[0, 0.19, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[1.78, 0.22, 48, 128]} />
+          <torusGeometry args={[1.78, 0.22, 32, 64]} />
           <meshPhysicalMaterial
             color="#c8a84a"
             metalness={1}
@@ -236,7 +236,7 @@ function LuxuryWatch() {
 
         {/* ── SAFFRON GLOW RING ── */}
         <mesh ref={saffronRingRef} position={[0, 0.191, 0]} rotation={[Math.PI / 2, 0, 0]}>
-          <torusGeometry args={[1.56, 0.028, 32, 120]} />
+          <torusGeometry args={[1.56, 0.028, 16, 64]} />
           <meshStandardMaterial
             color="#E8621A"
             emissive="#E8621A"
@@ -297,7 +297,7 @@ export default function EducaWatchCanvas() {
     <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, pointerEvents: 'none' }}>
       <Canvas
         camera={{ position: [0, 0, 8.2], fov: 37 }}
-        dpr={[1, 2]}
+        dpr={[1, 1.5]}
         gl={{ alpha: true, antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.4 }}
       >
         {/* Low ambient so lights drive the drama */}

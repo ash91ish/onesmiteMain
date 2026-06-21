@@ -136,7 +136,7 @@ export default function ImpactSection() {
           }}
         >
           {/* Left: anchoring copy */}
-          <div ref={headRef} style={{ position: 'sticky', top: '120px' }}>
+          <div ref={headRef} className="lg:sticky lg:top-[120px]">
             <motion.span
               className="eyebrow eyebrow-dark"
               initial={{ opacity: 0, y: 14 }}

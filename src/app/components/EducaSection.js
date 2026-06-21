@@ -280,12 +280,11 @@ export default function EducaSection() {
             initial={{ opacity: 0, scale: 0.94, y: 28 }}
             animate={contentInView ? { opacity: 1, scale: 1, y: 0 } : {}}
             transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.12 }}
-            className="float-gentle"
             style={{
               position: 'relative',
               borderRadius: '20px',
               overflow: 'hidden',
-              height: '580px',
+              height: 'clamp(350px, 90vw, 580px)',
               background: 'linear-gradient(145deg, #00060e 0%, #010d1c 60%, #010810 100%)',
               border: '1px solid rgba(255,255,255,0.07)',
               boxShadow: '0 0 0 1px rgba(232,98,26,0.12), 0 40px 100px rgba(0,0,0,0.6), 0 8px 40px rgba(232,98,26,0.08)',

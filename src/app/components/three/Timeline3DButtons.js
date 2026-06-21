@@ -73,7 +73,7 @@ export default function Timeline3DButtons({ activeStage, setActiveStage, stageCo
 
   return (
     <div style={{ height: '80px', width: '100%', marginTop: '1rem', position: 'relative', zIndex: 10 }}>
-      <Canvas camera={{ position: [0, 0, 5], fov: 45 }} gl={{ antialias: true, alpha: true }}>
+      <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 1.5]} gl={{ antialias: true, alpha: true }}>
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
         <pointLight position={[-10, -10, -10]} intensity={0.5} />
