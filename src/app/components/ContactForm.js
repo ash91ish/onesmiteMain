@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-
+import { submitContactForm } from '@/app/actions/contact'
 import { CheckCircle, Loader2 } from 'lucide-react'
 
 export default function ContactForm() {
@@ -39,18 +39,12 @@ export default function ContactForm() {
     setServerError('')
 
     try {
-      const res = await fetch('/api/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          name: values.name,
-          email: values.email,
-          subject: values.subject,
-          message: values.message,
-        }),
+      const result = await submitContactForm({
+        name: values.name,
+        email: values.email,
+        subject: values.subject,
+        message: values.message,
       })
-
-      const result = await res.json()
 
       if (!result.success) {
         throw new Error(result.error)
