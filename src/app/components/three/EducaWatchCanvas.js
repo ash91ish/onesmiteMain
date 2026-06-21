@@ -3,6 +3,7 @@
 import { useRef, useEffect, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { Float } from '@react-three/drei'
+import { useInView } from 'framer-motion'
 import * as THREE from 'three'
 
 // ─── Orbital glow rings ───────────────────────────────────────────
@@ -293,9 +294,13 @@ function LuxuryWatch() {
 
 // ─── Canvas ───────────────────────────────────────────────────────
 export default function EducaWatchCanvas() {
+  const ref = useRef(null)
+  const inView = useInView(ref, { margin: '200px' })
+
   return (
-    <div style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+    <div ref={ref} style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, pointerEvents: 'none' }}>
       <Canvas
+        frameloop={inView ? 'always' : 'demand'}
         camera={{ position: [0, 0, 8.2], fov: 37 }}
         dpr={[1, 1.5]}
         gl={{ alpha: true, antialias: true, toneMapping: THREE.ACESFilmicToneMapping, toneMappingExposure: 1.4 }}

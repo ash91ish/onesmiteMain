@@ -2,6 +2,7 @@
 
 import { useRef, useMemo, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
+import { useInView } from 'framer-motion'
 import * as THREE from 'three'
 
 function BrainVines({ count = 250, maxDistance = 3.5 }) {
@@ -145,9 +146,13 @@ function BrainVines({ count = 250, maxDistance = 3.5 }) {
 }
 
 export default function TimelineCanvas() {
+  const ref = useRef(null)
+  const inView = useInView(ref, { margin: '200px' })
+
   return (
-    <div className="absolute inset-0 z-0 pointer-events-none opacity-50">
+    <div ref={ref} className="absolute inset-0 z-0 pointer-events-none opacity-50">
       <Canvas
+        frameloop={inView ? 'always' : 'demand'}
         camera={{ position: [0, 0, 20], fov: 45 }}
         dpr={[1, 1.5]}
         gl={{ antialias: true, alpha: true }}

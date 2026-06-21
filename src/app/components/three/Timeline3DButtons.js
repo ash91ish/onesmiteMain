@@ -2,6 +2,7 @@
 
 import { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
+import { useInView } from 'framer-motion'
 import * as THREE from 'three'
 
 function StageButton({ active, index, onClick, position }) {
@@ -66,14 +67,22 @@ function StageButton({ active, index, onClick, position }) {
 }
 
 export default function Timeline3DButtons({ activeStage, setActiveStage, stageCount }) {
+  const ref = useRef(null)
+  const inView = useInView(ref, { margin: '200px' })
+
   // Calculate positions so they are centered
   const spacing = 1.8
   const totalWidth = (stageCount - 1) * spacing
   const startX = -totalWidth / 2
 
   return (
-    <div style={{ height: '80px', width: '100%', marginTop: '1rem', position: 'relative', zIndex: 10 }}>
-      <Canvas camera={{ position: [0, 0, 5], fov: 45 }} dpr={[1, 1.5]} gl={{ antialias: true, alpha: true }}>
+    <div ref={ref} style={{ height: '80px', width: '100%', marginTop: '1rem', position: 'relative', zIndex: 10 }}>
+      <Canvas 
+        frameloop={inView ? 'always' : 'demand'}
+        camera={{ position: [0, 0, 5], fov: 45 }} 
+        dpr={[1, 1.5]} 
+        gl={{ antialias: true, alpha: true }}
+      >
         <ambientLight intensity={0.5} />
         <pointLight position={[10, 10, 10]} intensity={1} />
         <pointLight position={[-10, -10, -10]} intensity={0.5} />

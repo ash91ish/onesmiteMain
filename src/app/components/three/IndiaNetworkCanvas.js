@@ -3,6 +3,7 @@
 import { useRef, useEffect, useMemo, useState } from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import { MeshReflectorMaterial, Float } from '@react-three/drei'
+import { useInView } from 'framer-motion'
 import * as THREE from 'three'
 
 // ── 1. The Infinite Datacenter Racks ──
@@ -249,14 +250,20 @@ function Scene() {
 }
 
 export default function IndiaNetworkCanvas() {
+  const ref = useRef(null)
+  const inView = useInView(ref, { margin: '200px' })
+
   return (
-    <Canvas
-      camera={{ position: [0, 1.5, 4], fov: 50 }}
-      dpr={[1, 1.5]}
-      gl={{ antialias: true, alpha: true }}
-      style={{ background: 'transparent' }}
-    >
-      <Scene />
-    </Canvas>
+    <div ref={ref} style={{ width: '100%', height: '100%', position: 'absolute', inset: 0, pointerEvents: 'none' }}>
+      <Canvas
+        frameloop={inView ? 'always' : 'demand'}
+        camera={{ position: [0, 1.5, 4], fov: 50 }}
+        dpr={[1, 1.5]}
+        gl={{ antialias: true, alpha: true }}
+        style={{ background: 'transparent' }}
+      >
+        <Scene />
+      </Canvas>
+    </div>
   )
 }
