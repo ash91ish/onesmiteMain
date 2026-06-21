@@ -12,7 +12,7 @@ export default function Roadmap() {
 
           <div className="border border-white/10 p-4 rounded-lg">
             <h3 className="text-white mb-2">2026–2030</h3>
-            Business automation, enterprise AI, Indian SaaS exports.
+            Business automation, enterprise AI, global SaaS exports.
           </div>
 
           <div className="border border-white/10 p-4 rounded-lg">

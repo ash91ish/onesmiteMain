@@ -1,79 +1,88 @@
+import Link from 'next/link'
 import SectionWrapper from './SectionWrapper'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, Boxes, CheckCircle2 } from 'lucide-react'
 
-// Repurposed: WhatWeBuild section for the Home page
+const PRODUCTS = [
+  {
+    status: 'Active',
+    title: 'Onesmite Educa',
+    body: "AI-powered assessment infrastructure for India's competitive exam ecosystem, built for students and educators who need clarity, speed, and trust.",
+    points: ['Mock tests and classrooms', 'AI post-test analysis', 'Educator monetization tools'],
+    href: 'https://edu.onesmite.com',
+  },
+  {
+    status: 'Research',
+    title: 'Future Verticals',
+    body: 'Additional software infrastructure products are researched only after a real workflow, revenue path, and technical moat are visible.',
+    points: ['Focused markets', 'Revenue-funded R&D', 'Long-horizon architecture'],
+    href: '/products',
+  },
+]
+
 export default function About() {
   return (
-    <section aria-labelledby="what-we-build-heading">
-      <SectionWrapper>
-        {/* Section label */}
-        <div className="label-chip mb-5 inline-flex">
-          What We Build
-        </div>
+    <section className="section-band" aria-labelledby="what-we-build-heading">
+      <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:items-start">
+        <SectionWrapper>
+          <div className="section-kicker mb-5">What we build</div>
+          <h2
+            id="what-we-build-heading"
+            className="font-heading text-[clamp(2rem,5vw,3.55rem)] font-extrabold leading-[1.03] text-primary"
+          >
+            Focused products with serious operating depth.
+          </h2>
+          <p className="mt-5 max-w-[520px] text-base leading-[1.8] text-muted">
+            Onesmite is structured as a parent company for software products that solve specific,
+            high-friction problems. We ship one product deeply before expanding into the next.
+          </p>
+        </SectionWrapper>
 
-        <h2
-          id="what-we-build-heading"
-          className="font-heading text-[clamp(1.625rem,3vw,2.25rem)] font-bold tracking-[-0.025em] text-primary mb-4 max-w-[540px]"
-        >
-          Focused products.<br />Real problems.
-        </h2>
-
-        <p className="text-base text-muted leading-[1.7] max-w-[620px] mb-12">
-          Onesmite operates as a parent company with multiple focused product verticals.
-          Each product is built to solve a specific, real problem — with long-term
-          architecture and production-grade execution.
-        </p>
-      </SectionWrapper>
-
-      {/* Cards */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-1 bg-border border border-border">
-        {/* Onesmite Educa Card */}
-        <SectionWrapper delay={100}>
-          <div className="card h-full border-none rounded-none flex flex-col">
-            <div className="flex items-start justify-between mb-5">
-              <div>
-                <div className="mb-3">
-                  <span className="label-chip active">Active</span>
+        <div className="grid gap-4">
+          {PRODUCTS.map((product, index) => (
+            <SectionWrapper key={product.title} delay={index * 90}>
+              <article className="card">
+                <div className="relative z-10">
+                  <div className="mb-5 flex items-start justify-between gap-4">
+                    <div>
+                      <span className={`label-chip ${product.status === 'Active' ? 'active' : 'research'}`}>
+                        {product.status}
+                      </span>
+                      <h3 className="mt-4 font-heading text-2xl font-extrabold text-primary">
+                        {product.title}
+                      </h3>
+                    </div>
+                    <div className="grid h-11 w-11 shrink-0 place-items-center border border-white/10 bg-white/0.04">
+                      <Boxes size={18} className="text-accent" />
+                    </div>
+                  </div>
+                  <p className="max-w-[620px] text-[0.95rem] leading-[1.75] text-muted">{product.body}</p>
+                  <div className="mt-6 grid gap-2 sm:grid-cols-3">
+                    {product.points.map((point) => (
+                      <div key={point} className="flex items-center gap-2 text-sm text-muted">
+                        <CheckCircle2 size={15} className="shrink-0 text-[#62d28f]" />
+                        {point}
+                      </div>
+                    ))}
+                  </div>
+                  {product.href.startsWith('http') ? (
+                    <a
+                      href={product.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-accent no-underline"
+                    >
+                      Visit product <ArrowUpRight size={15} />
+                    </a>
+                  ) : (
+                    <Link href={product.href} className="mt-7 inline-flex items-center gap-2 text-sm font-bold text-accent no-underline">
+                      Explore roadmap <ArrowUpRight size={15} />
+                    </Link>
+                  )}
                 </div>
-                <h3 className="font-heading text-xl font-bold text-primary tracking-[-0.02em]">
-                  Onesmite Educa
-                </h3>
-              </div>
-            </div>
-
-            <p className="text-[0.9375rem] text-muted leading-[1.65] flex-grow mb-6">
-              AI-powered EdTech platform for India's competitive exam ecosystem.
-              Serves students preparing for SSC, BPSC, Banking, and Railways exams,
-              and enables teachers to build, manage, and monetize assessments.
-            </p>
-
-            <a
-              href="https://edu.onesmite.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 text-[0.875rem] font-semibold text-accent no-underline transition-all duration-200 ease-out hover:gap-2"
-            >
-              Visit Onesmite Educa <ArrowUpRight size={14} />
-            </a>
-          </div>
-        </SectionWrapper>
-
-        {/* Additional Verticals Card */}
-        <SectionWrapper delay={180}>
-          <div className="card h-full border-none rounded-none flex flex-col">
-            <div className="mb-5">
-              <div className="mb-3">
-                <span className="label-chip research">Research Phase</span>
-              </div>
-              <h3 className="font-heading text-xl font-bold text-primary tracking-[-0.02em]">
-                Additional Verticals
-              </h3>
-            </div>
-            <p className="text-[0.9375rem] text-muted leading-[1.65]">
-              Additional product verticals are currently under research.
-            </p>
-          </div>
-        </SectionWrapper>
+              </article>
+            </SectionWrapper>
+          ))}
+        </div>
       </div>
     </section>
   )

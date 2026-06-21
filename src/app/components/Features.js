@@ -3,56 +3,51 @@ import SectionWrapper from './SectionWrapper'
 const PRINCIPLES = [
   {
     number: '01',
-    heading: 'Product-First Execution',
-    body: 'Every research direction is anchored in a working product with real users.',
+    heading: 'Product-first execution',
+    body: 'Every research direction is validated through a working product with real users, not a presentation deck.',
   },
   {
     number: '02',
-    heading: 'Revenue-Funded Innovation',
-    body: 'Sustainable product revenue shields and funds long-term R&D.',
+    heading: 'Revenue-funded innovation',
+    body: 'Sustainable product revenue funds the next layer of R&D and keeps strategy independent.',
   },
   {
     number: '03',
-    heading: 'Long-Term Architecture',
-    body: 'Systems are built for decade-scale reliability, not short-term demos.',
+    heading: 'Long-term architecture',
+    body: 'Systems are designed for maintainability, scale, and trust before visual novelty or speed theater.',
   },
   {
     number: '04',
-    heading: 'Human-Centric Automation',
-    body: 'Automation is deployed as a capability amplifier with human oversight — never as a black-box replacement.',
+    heading: 'Human-centric automation',
+    body: 'AI and automation amplify students, teachers, and operators while keeping accountability visible.',
   },
 ]
 
-// Repurposed: OperatingPrinciples section for the Home page
 export default function Features() {
   return (
-    <section aria-labelledby="principles-heading">
+    <section className="section-band" aria-labelledby="principles-heading">
       <SectionWrapper>
-        <div className="label-chip mb-5 inline-flex">
-          Operating Principles
-        </div>
+        <div className="section-kicker mb-5">Operating principles</div>
         <h2
           id="principles-heading"
-          className="font-heading text-[clamp(1.625rem,3vw,2.25rem)] font-bold tracking-[-0.025em] text-primary mb-12 max-w-[520px]"
+          className="max-w-[670px] font-heading text-[clamp(2rem,5vw,3.3rem)] font-extrabold leading-[1.05] text-primary"
         >
-          How we build and why it matters.
+          A company architecture for products that compound.
         </h2>
       </SectionWrapper>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(260px,1fr))] gap-[1px] bg-border border border-border">
+      <div className="mt-10 grid gap-px overflow-hidden border border-border bg-border lg:grid-cols-4">
         {PRINCIPLES.map((p, i) => (
           <SectionWrapper key={p.number} delay={i * 70}>
-            <div className="card h-full border-none rounded-none">
-              <div className="font-mono text-[0.6875rem] font-medium text-accent tracking-[0.1em] mb-3.5 opacity-80">
+            <article className="min-h-[280px] bg-[#0d131b] p-6 transition hover:bg-[#111a24]">
+              <div className="font-mono text-[0.7rem] font-semibold uppercase tracking-[0.1em] text-accent">
                 {p.number}
               </div>
-              <h3 className="font-heading text-[1.0625rem] font-bold text-primary tracking-[-0.01em] mb-2.5">
+              <h3 className="mt-16 font-heading text-xl font-bold text-primary lg:mt-20">
                 {p.heading}
               </h3>
-              <p className="text-[0.9375rem] text-muted leading-[1.65]">
-                {p.body}
-              </p>
-            </div>
+              <p className="mt-3 text-[0.92rem] leading-[1.75] text-muted">{p.body}</p>
+            </article>
           </SectionWrapper>
         ))}
       </div>

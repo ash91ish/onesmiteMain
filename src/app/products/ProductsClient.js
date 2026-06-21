@@ -1,458 +1,487 @@
 'use client'
 
-import { useState } from 'react'
-import SectionWrapper from '../components/SectionWrapper'
+import { useState, useRef } from 'react'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 import {
-  ArrowUpRight, Check, Zap, Shield, Users, BookOpen,
-  BarChart2, Brain, Layers, Lock, Globe, TrendingUp,
-  Award, Clock, FileText, PlayCircle, Star, ChevronDown,
-  ChevronRight, Wallet, Server, GraduationCap, Briefcase,
-  Target, Sparkles, Database, Code
+  ArrowUpRight,
+  Award,
+  BarChart3,
+  BookOpen,
+  Brain,
+  Briefcase,
+  ChevronDown,
+  Database,
+  FileText,
+  Globe,
+  GraduationCap,
+  IndianRupee,
+  Lock,
+  PlayCircle,
+  Server,
+  Shield,
+  Target,
+  TrendingUp,
+  Users,
+  Wallet,
+  Zap,
 } from 'lucide-react'
+import Link from 'next/link'
 
-// ─── Data ────────────────────────────────────────────────────
-const STUDENT_FEATURES = [
-  { icon: Brain, label: 'AI Post-Test Analysis', desc: 'Precision-target weaknesses with deep performance analytics, topic-level reports, and personalised improvement roadmaps.' },
-  { icon: Target, label: 'Pressure-Simulation Tests', desc: 'Full-length mock tests matching the exact pattern, timing, and difficulty of real competitive exams.' },
-  { icon: BarChart2, label: 'National Leaderboards', desc: 'Compete with peers in real time. Live rankings show exactly where you stand among thousands of students.' },
-  { icon: PlayCircle, label: 'Educator-Led Classrooms', desc: 'Join structured classrooms taught by verified subject specialists — with curated content mapped to your exam.' },
-  { icon: Award, label: 'Verified Certificates', desc: 'Earn performance-verified digital certificates that demonstrate your preparation benchmark to institutions.' },
-  { icon: BookOpen, label: 'Curated Study Resources', desc: 'Access systematically organised notes, PYQs, and reference materials reviewed for exam-pattern accuracy.' },
-]
-
-const TEACHER_FEATURES = [
-  { icon: Zap, label: 'AI Test Creator', desc: 'Upload any PDF booklet and auto-generate complete MCQ tests in seconds using our AI question engine.' },
-  { icon: FileText, label: 'Manual Test Builder', desc: 'Full control — build custom tests from scratch with multi-language support and instant publishing.' },
-  { icon: Globe, label: 'Public & Private Classrooms', desc: 'Create open-platform classrooms for student discovery, or private batches with invite-only access.' },
-  { icon: TrendingUp, label: 'Revenue Analytics Dashboard', desc: 'Track earnings, student enrollments, and engagement trends in real time from one clean workspace.' },
-  { icon: Wallet, label: 'Pay-As-You-Go Billing', desc: 'No lock-in, no monthly fees. Pay ₹0.5/student/hour for hosting — only when exams are actively running.' },
-  { icon: Shield, label: 'Secure Exam Delivery', desc: 'Randomised questions, time-bound access, server-side validation, and session tracking protect integrity.' },
-]
-
-const PRICING_ITEMS = [
-  { label: 'AI Question Generation', value: '₹4.9 / 1,000 tokens', note: '~10 tokens per question' },
-  { label: 'Manual Question Creation', value: 'Free', note: 'Always free, no limits' },
-  { label: 'Exam Hosting Cost', value: '₹0.5 / student / hour', note: 'Only during active test windows' },
-  { label: 'Study Material Storage', value: 'Free', note: '₹3/GB only on student downloads' },
-  { label: 'Platform Commission', value: '25%', note: 'On paid test revenue only' },
-  { label: 'Free Test Hosting', value: '₹0.20 / attempt', note: 'Deducted from main wallet' },
-]
-
-const EXAM_CATEGORIES = [
-  { label: 'Staff Selection', example: 'SSC CGL, CHSL, MTS' },
-  { label: 'State Civil Services', example: 'BPSC, JPSC & more' },
-  { label: 'Banking & Finance', example: 'IBPS PO, SBI Clerk & more' },
-  { label: 'Railways', example: 'RRB NTPC, Group D & more' },
-  { label: 'Defence & Police', example: 'NDA, CDS, SSP & more' },
-  { label: 'Teaching Exams', example: 'CTET, STET & more' },
-]
-
-const SECURITY_ITEMS = [
-  { icon: Lock, title: 'AES-256 Encryption at Rest', desc: 'Same standard used by banks and government institutions for sensitive data.' },
-  { icon: Server, title: 'TLS 1.3 in Transit', desc: 'All browser-to-server data is encrypted — unreadable to any third party.' },
-  { icon: Shield, title: 'KYC Verified Educators', desc: 'Mandatory KYC verification before any financial feature is unlocked.' },
-  { icon: Code, title: 'JWT + RBAC Auth', desc: 'Server-validated sessions with strict role-privilege separation and no cross-role leakage.' },
-  { icon: Database, title: 'Zero-Trust Architecture', desc: 'Internal services authenticate every single request — nothing is assumed trusted.' },
-  { icon: Globe, title: 'IT Act & DPDPA Compliant', desc: 'Full compliance with Indian data protection regulations and GST/TDS requirements.' },
-]
+const AUDIENCES = {
+  student: {
+    label: 'Students',
+    icon: GraduationCap,
+    heading: 'Prepare with clarity, pressure, and measurable progress.',
+    body: 'Practice for Indian competitive exams through structured tests, educator-led classrooms, live rankings, and AI analysis that explains what to improve next.',
+    cta: 'Start free test',
+    href: 'https://edu.onesmite.com/web/test',
+    features: [
+      { icon: Brain, title: 'AI post-test analysis', body: 'Topic-level weakness mapping and improvement paths after every test.' },
+      { icon: Target, title: 'Pressure simulation', body: 'Timed mock tests mapped to competitive exam patterns and difficulty.' },
+      { icon: BarChart3, title: 'Live leaderboards', body: 'National-style rankings that show where preparation really stands.' },
+      { icon: PlayCircle, title: 'Educator classrooms', body: 'Join verified teachers and structured batches for your target exam.' },
+      { icon: Award, title: 'Performance proof', body: 'Certificates and reports that capture benchmarked preparation outcomes.' },
+      { icon: BookOpen, title: 'Study resources', body: 'Organized notes, PYQs, and learning material in one workflow.' },
+    ],
+  },
+  teacher: {
+    label: 'Educators',
+    icon: Briefcase,
+    heading: 'Launch a test business without building the platform yourself.',
+    body: 'Create tests manually or with AI, run private or public classrooms, monetize content, and track revenue from one operational workspace.',
+    cta: 'Join as educator',
+    href: 'https://teacher.onesmite.com',
+    features: [
+      { icon: Zap, title: 'AI test creator', body: 'Upload content and generate MCQ tests quickly with AI assistance.' },
+      { icon: FileText, title: 'Manual builder', body: 'Create custom papers, options, timing, and publishing rules.' },
+      { icon: Globe, title: 'Public and private classrooms', body: 'Run discovery-friendly classrooms or invite-only batches.' },
+      { icon: TrendingUp, title: 'Revenue analytics', body: 'Track enrollments, earnings, attempts, and student engagement.' },
+      { icon: Wallet, title: 'Pay-as-you-go cost', body: 'Avoid fixed platform bills and pay only around active usage.' },
+      { icon: Shield, title: 'Secure delivery', body: 'Server-side validation, protected sessions, and controlled exam access.' },
+    ],
+  },
+}
 
 const STATS = [
-  { value: '99.99%', label: 'Platform Uptime SLA' },
-  { value: 'PAYG', label: 'Zero Lock-in Pricing' },
-  { value: 'AES-256', label: 'Encryption Standard' },
-  { value: 'DPDPA', label: '2023 Compliant' },
+  { value: '99.99%', label: 'Uptime target' },
+  { value: 'PAYG', label: 'Pricing model' },
+  { value: 'AES-256', label: 'At-rest encryption' },
+  { value: 'DPDPA', label: 'Compliance posture' },
 ]
 
-// ─── Sub-components ───────────────────────────────────────────
-function PerspectiveTab({ active, onClick, icon: Icon, label, sublabel }) {
+const PRICING = [
+  { label: 'AI question generation', value: 'Rs. 4.9 / 1,000 tokens', note: 'Usage based' },
+  { label: 'Manual question creation', value: 'Free', note: 'No creation limits' },
+  { label: 'Exam hosting', value: 'Rs. 0.5 / student / hour', note: 'Only during live exams' },
+  { label: 'Study material storage', value: 'Free', note: 'Download usage may apply' },
+  { label: 'Platform commission', value: '25%', note: 'On paid test revenue' },
+]
+
+const EXAMS = ['SSC', 'BPSC', 'Banking', 'Railways', 'Defence', 'Teaching exams', 'State PSC', 'Police']
+
+const SECURITY = [
+  { icon: Lock, title: 'Encrypted data', body: 'AES-256 at rest and TLS-secured traffic in transit.' },
+  { icon: Server, title: 'Validated sessions', body: 'Server-side rules protect attempts, timing, and exam access.' },
+  { icon: Users, title: 'Verified educators', body: 'KYC-oriented educator workflows before financial features.' },
+  { icon: Database, title: 'Zero-trust posture', body: 'Internal services authenticate requests instead of assuming trust.' },
+]
+
+const FAQS = [
+  {
+    q: 'Is Onesmite Educa free for students?',
+    a: 'Students can access free practice tests and public classrooms. Paid test series or classrooms may be offered by educators at their own pricing.',
+  },
+  {
+    q: 'How does educator billing work?',
+    a: 'The platform uses pay-as-you-go pricing for usage such as AI generation and live exam hosting, plus a platform commission on paid test revenue.',
+  },
+  {
+    q: 'Which exams does it support?',
+    a: 'Educators can publish content for SSC, BPSC, Banking, Railways, Defence, Teaching exams, State PSC, and adjacent competitive exam categories.',
+  },
+  {
+    q: 'How is student data protected?',
+    a: 'The system is designed around encrypted data, protected sessions, role-aware access, and India-focused compliance requirements.',
+  },
+]
+
+function FadeUp({ children, delay = 0, className = "" }) {
+  const ref = useRef(null)
+  const isInView = useInView(ref, { once: true, margin: "-50px" })
   return (
-    <button
-      onClick={onClick}
-      className={`group flex-1 flex flex-col items-start gap-1 p-5 border transition-all duration-300 text-left cursor-pointer rounded-lg
-        ${active
-          ? 'border-border-strong border-gray-600 bg-surface-2'
-          : 'border-border bg-surface hover:border-border-strong hover:bg-surface-2'
-        }`}
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 24 }}
+      animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 24 }}
+      transition={{ duration: 0.7, delay, ease: [0.16, 1, 0.3, 1] }}
+      className={className}
     >
-      <div className={`flex items-center gap-2.5 mb-1 ${active ? 'text-accent' : 'text-muted group-hover:text-accent'} transition-colors`}>
-        <Icon size={16} />
-        <span className="font-mono text-[0.6875rem] tracking-[0.08em] uppercase font-medium">{label}</span>
-      </div>
-      <p className={`text-[0.875rem] leading-[1.5] ${active ? 'text-primary' : 'text-muted'}`}>{sublabel}</p>
-    </button>
+      {children}
+    </motion.div>
   )
 }
 
-function FeatureCard({ icon: Icon, label, desc }) {
+function FeatureCard({ icon: Icon, title, body, index }) {
   return (
-    <div className="card rounded-lg group">
-      <div className="flex items-center gap-3 mb-3">
-        <div className="w-8 h-8 rounded-md bg-surface-2 border border-border flex items-center justify-center shrink-0 group-hover:border-border-strong transition-colors">
-          <Icon size={15} className="text-accent" />
+    <FadeUp delay={0.1 * index} className="h-full">
+      <div className="card-dark group h-full rounded-2xl p-6 hover:border-accent/20 hover:bg-white/[0.02] transition-all duration-300">
+        <div className="mb-5 inline-flex h-11 w-11 items-center justify-center rounded-lg border border-white/10 bg-white/[0.03] text-accent transition-transform duration-300 group-hover:scale-110 group-hover:bg-accent/5">
+          <Icon size={18} />
         </div>
-        <span className="text-[0.9375rem] font-semibold text-primary">{label}</span>
+        <h3 className="font-sans text-[1.1rem] font-bold text-primary mb-2.5 tracking-tight">{title}</h3>
+        <p className="text-[0.92rem] leading-[1.65] text-muted">{body}</p>
       </div>
-      <p className="text-[0.875rem] text-muted leading-[1.6]">{desc}</p>
-    </div>
+    </FadeUp>
   )
 }
 
-// ─── Page ─────────────────────────────────────────────────────
+function SecurityCard({ icon: Icon, title, body, index }) {
+  return (
+    <FadeUp delay={0.1 * index} className="h-full">
+      <div className="card-dark group relative h-full overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:border-accent/30 hover:bg-white/[0.02]">
+        <div className="absolute top-0 right-0 h-[80px] w-[80px] rounded-full bg-[radial-gradient(circle_at_center,rgba(232,98,26,0.02),transparent_70%)] blur-[20px]" />
+
+        <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-xl border border-white/10 bg-white/[0.02] text-accent transition-all duration-300 group-hover:border-accent/30 group-hover:bg-accent/5 group-hover:scale-110">
+          <Icon size={22} />
+        </div>
+
+        <h3 className="font-sans text-[1.1rem] font-bold text-primary mb-2.5 flex items-center gap-2">
+          {title}
+        </h3>
+        <p className="text-[0.92rem] leading-[1.65] text-muted">{body}</p>
+      </div>
+    </FadeUp>
+  )
+}
+
 export default function ProductsPageClient() {
   const [activeTab, setActiveTab] = useState('student')
-  const [expandedFaq, setExpandedFaq] = useState(null)
-
-  const faqs = [
-    { q: 'Is Onesmite Educa free for students?', a: 'Students can access free practice tests and public classrooms at no cost. Premium test series and paid classrooms are offered by educators at their own pricing — typically much lower than traditional coaching due to our PAYG model for teachers.' },
-    { q: 'How does the educator billing model work?', a: 'Onesmite uses a Pay-As-You-Go model with no monthly fees. You pay only for AI token usage (₹4.9/1,000 tokens), exam hosting (₹0.5/student/hour during active tests), and a 25% platform commission on paid test revenue. Manual question creation and study material storage are always free.' },
-    { q: 'Which competitive exams does Onesmite Educa cover?', a: 'The platform covers SSC (CGL, CHSL, MTS), BPSC, Banking (IBPS PO/Clerk, SBI PO/Clerk), Railways (RRB NTPC, Group D), and State PSC exams. Educators can build content for any exam category — coverage grows as educators join.' },
-    { q: 'How is student data protected?', a: 'All data is AES-256 encrypted at rest and TLS 1.3 encrypted in transit. Onesmite is fully compliant with the IT Act 2000, SPDI Rules 2011, and DPDPA 2023. Student academic data is never sold or shared with any unauthorized third parties.' },
-    { q: 'Can teachers monetize their content on the platform?', a: 'Yes. Educators can publish paid test series (₹30–₹60 per test), offer paid classrooms, and receive direct bank payouts. Onesmite auto-deducts a transparent 25% platform fee and handles TDS/GST compliance automatically based on your registration status.' },
-    { q: 'What makes Onesmite Educa different from other EdTech platforms?', a: 'Unlike platforms with rigid pricing tiers, Onesmite charges educators only for actual usage — making it viable for individual tutors and large institutes alike. Our DUCA AI provides genuine insight into student performance gaps, not just surface analytics. The platform is purpose-built for Indian competitive exams, not repurposed from global templates.' },
-  ]
+  const [expandedFaq, setExpandedFaq] = useState(0)
+  const active = AUDIENCES[activeTab]
+  const ActiveIcon = active.icon
 
   return (
-    <main>
-      {/* ── Hero Section ── */}
-      <div className="max-w-[1200px] mx-auto pt-20 pb-8 px-6">
-        <SectionWrapper>
-          <div className="label-chip mb-5 inline-flex">Products</div>
-          <h1 className="font-heading text-[clamp(2rem,4vw,3.25rem)] font-extrabold tracking-[-0.03em] text-primary mb-5 max-w-[700px] leading-[1.1]">
-            One Platform. <span className="text-gradient-accent">Two Powerful Sides.</span>
-          </h1>
-          <p className="text-[clamp(1rem,2vw,1.0625rem)] text-muted leading-[1.75] max-w-[580px] mb-10">
-            Onesmite Educa connects India's most ambitious students with verified educators through an AI-powered assessment and learning infrastructure. Built for real outcomes — not just engagement metrics.
-          </p>
+    <main className="relative overflow-hidden selection:bg-brand selection:text-white">
+      {/* GLOBAL BACKGROUND ELEMENTS */}
+      <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-40 mix-blend-overlay" />
+      <div className="pointer-events-none absolute top-0 right-0 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle_at_center,rgba(232,98,26,0.06),transparent_70%)] blur-[80px]" />
+      <div className="pointer-events-none absolute top-[20%] left-[-10%] h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle_at_center,rgba(2,62,105,0.1),transparent_60%)] blur-[100px]" />
 
-          {/* Key Stats */}
-          <div className="flex flex-wrap gap-x-10 gap-y-4 mb-6">
-            {STATS.map((s) => (
-              <div key={s.label}>
-                <div className="font-heading text-[1.625rem] font-bold text-primary leading-none">{s.value}</div>
-                <div className="font-mono text-[0.6875rem] text-muted tracking-[0.08em] uppercase mt-1">{s.label}</div>
-              </div>
-            ))}
-          </div>
-        </SectionWrapper>
-      </div>
-
-      <hr className="section-divider" />
-
-      {/* ── Dual Perspective Tabs ── */}
-      <div className="max-w-[1200px] mx-auto py-16 px-6">
-        <SectionWrapper>
-          {/* Tab Switcher */}
-          <div className="flex gap-3 mb-10 flex-col sm:flex-row">
-            <PerspectiveTab
-              active={activeTab === 'student'}
-              onClick={() => setActiveTab('student')}
-              icon={GraduationCap}
-              label="For Students"
-              sublabel="Prep smarter for any competitive exam — discover content from verified educators in your domain."
-            />
-            <PerspectiveTab
-              active={activeTab === 'teacher'}
-              onClick={() => setActiveTab('teacher')}
-              icon={Briefcase}
-              label="For Educators"
-              sublabel="Build, monetize, and scale your teaching with zero upfront cost."
-            />
-          </div>
-
-          {/* ── Student View ── */}
-          {activeTab === 'student' && (
+      {/* HERO SECTION */}
+      <section className="relative z-10 pt-16 pb-12 md:pt-24 md:pb-16">
+        <div className="page-shell">
+          <div className="grid gap-16 lg:grid-cols-[1fr_0.85fr] lg:items-center">
             <div>
-              <div className="flex items-start justify-between flex-wrap gap-4 mb-8">
-                <div>
-                  <div className="label-chip active inline-flex mb-3">
-                    <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse shrink-0" />
-                    Live Platform · Early Access
-                  </div>
-                  <h2 className="font-heading text-[clamp(1.5rem,3vw,2rem)] font-bold text-primary tracking-[-0.02em] mb-2 max-w-[540px]">
-                    Every Student Deserves a Real Shot at Success.
-                  </h2>
-                  <p className="text-[0.9375rem] text-muted leading-[1.7] max-w-[580px]">
-                    Onesmite Educa was built on a simple belief — where you come from should never decide how far you can go. We give you the tools, the data, and the clarity to compete at the highest level.
-                  </p>
+              <FadeUp delay={0.1}>
+                <div className="eyebrow eyebrow-dark mb-8">
+                  Products & Infrastructure
                 </div>
-                <a
-                  href="https://edu.onesmite.com/web/test"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary shrink-0"
-                  aria-label="Start a free practice test on Onesmite Educa"
-                >
-                  Start Free Test <ArrowUpRight size={15} />
-                </a>
-              </div>
+              </FadeUp>
+              <FadeUp delay={0.2}>
+                <h1 className="max-w-[760px] font-heading text-[clamp(2rem,4vw,3.5rem)] font-extrabold leading-[1.2] tracking-tight text-primary">
+                  Onesmite Educa: <span className="text-gradient-brand">Our First Unified</span> <span className="text-gradient-saffron">Ecosystem.</span>
+                </h1>
+              </FadeUp>
+              <FadeUp delay={0.3}>
+                <p className="mt-8 max-w-[640px] text-[clamp(1.05rem,2vw,1.25rem)] leading-[1.8] text-muted">
+                  A high-scale, AI-powered assessment infrastructure designed for students preparing for high-stakes exams and educators building modern test businesses.
+                </p>
+              </FadeUp>
 
-              {/* Student Features Grid */}
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-3 mb-8">
-                {STUDENT_FEATURES.map((f) => (
-                  <FeatureCard key={f.label} {...f} />
+              <FadeUp delay={0.4}>
+                <div className="mt-12 flex flex-col gap-4 sm:flex-row">
+                  <a href="https://edu.onesmite.com" target="_blank" rel="noopener noreferrer" className="btn btn-primary group px-8 py-4 text-[0.95rem] font-semibold tracking-wide rounded-xl shadow-[0_8px_24px_rgba(232,98,26,0.25)]">
+                    Explore Educa Platform
+                    <ArrowUpRight size={18} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </a>
+                  <a href="#workspace" className="btn btn-ghost-dark px-8 py-4 text-[0.95rem] font-semibold tracking-wide rounded-xl">
+                    Choose Workspace
+                  </a>
+                </div>
+              </FadeUp>
+            </div>
+
+            <FadeUp delay={0.4} className="relative">
+              <div className="grid grid-cols-2 gap-4">
+                {STATS.map((stat, i) => (
+                  <div key={stat.label} className="card-dark p-6 rounded-2xl flex flex-col justify-between min-h-[125px] transition-all duration-300 hover:border-brand/30 hover:bg-white/[0.02]">
+                    <div className="font-sans text-2xl sm:text-3xl font-extrabold tracking-tight text-primary text-gradient-brand">
+                      {stat.value}
+                    </div>
+                    <div className="mt-4 font-mono text-[0.68rem] uppercase tracking-widest text-accent font-bold">
+                      {stat.label}
+                    </div>
+                  </div>
                 ))}
               </div>
+            </FadeUp>
+          </div>
+        </div>
+      </section>
 
-              {/* Exam Categories — Marketplace */}
-              <div className="border border-border rounded-lg bg-surface p-6 mb-6">
-                <div className="font-mono text-[0.6875rem] text-muted tracking-[0.08em] uppercase mb-1">Exam Categories on the Platform</div>
-                <p className="text-[0.8125rem] text-muted mb-5 leading-[1.6]">
-                  Onesmite Educa is a marketplace — the exams covered and the depth of content depend entirely on the educators who join. Find and follow teachers in your domain.
-                </p>
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-2">
-                  {EXAM_CATEGORIES.map((cat) => (
-                    <div
-                      key={cat.label}
-                      className="border border-border rounded-md bg-surface-2 px-4 py-3"
+      {/* DIVIDER */}
+      <div className="page-shell"><hr className="divider-dark" /></div>
+
+      {/* PLATFORM AUDIENCES SECTION */}
+      <section id="workspace" className="relative z-10 py-12 md:py-16">
+        <div className="page-shell">
+          <FadeUp delay={0.1}>
+            <div className="mb-16 flex flex-col items-center justify-center gap-6 text-center">
+              <h2 className="section-headline text-primary">Choose your workspace.</h2>
+
+              <div className="mt-4 inline-flex shrink-0 rounded-xl border border-white/10 bg-black/30 p-1.5 backdrop-blur-md">
+                {Object.entries(AUDIENCES).map(([key, audience]) => {
+                  const Icon = audience.icon
+                  const isActive = key === activeTab
+                  return (
+                    <button
+                      key={key}
+                      onClick={() => setActiveTab(key)}
+                      className={`relative flex items-center gap-2.5 rounded-lg px-8 py-3 text-[0.95rem] font-semibold transition-all duration-300 ${isActive ? 'text-primary' : 'text-muted hover:text-silver'
+                        }`}
                     >
-                      <div className="text-[0.875rem] font-semibold text-primary mb-0.5">{cat.label}</div>
-                      <div className="font-mono text-[0.75rem] text-muted">{cat.example}</div>
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeTabIndicator"
+                          className="absolute inset-0 rounded-lg bg-white/10 shadow-sm border border-white/5"
+                          transition={{ type: 'spring', stiffness: 400, damping: 30 }}
+                        />
+                      )}
+                      <Icon size={18} className={`relative z-10 ${isActive ? 'text-accent' : ''}`} />
+                      <span className="relative z-10 tracking-wide">{audience.label}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            </div>
+          </FadeUp>
+
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={activeTab}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="card-dark rounded-3xl p-8 md:p-14 backdrop-blur-xl">
+                <div className="mb-14 flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="max-w-[720px]">
+                    <div className="eyebrow eyebrow-dark mb-6">
+                      <ActiveIcon size={14} className="text-accent" />
+                      Active Platform
                     </div>
+                    <h3 className="font-heading text-[clamp(1.85rem,3vw,2.75rem)] font-extrabold leading-[1.08] tracking-tight text-primary">
+                      {active.heading}
+                    </h3>
+                    <p className="mt-5 text-[1.1rem] leading-[1.75] text-muted">{active.body}</p>
+
+                    <div className="mt-10">
+                      <a href={active.href} target="_blank" rel="noopener noreferrer" className="btn btn-primary group rounded-xl px-8 py-4 text-sm font-semibold tracking-wide">
+                        {active.cta}
+                        <ArrowUpRight size={18} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </a>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {active.features.map((feature, i) => (
+                    <FeatureCard key={feature.title} index={i} {...feature} />
                   ))}
                 </div>
               </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </section>
 
+      {/* DIVIDER */}
+      <div className="page-shell"><hr className="divider-dark" /></div>
 
-              {/* Mission Quote + CTAs */}
-              <div className="border border-border rounded-lg p-6 bg-surface relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
-                <blockquote className="font-heading text-[1.0625rem] text-primary italic leading-[1.65] mb-4">
-                  "The most prepared student wins — and we're here to make that student <span className="text-accent not-italic">you</span>."
-                </blockquote>
-                <div className="flex flex-wrap gap-3">
-                  <a href="https://edu.onesmite.com/web/test" target="_blank" rel="noopener noreferrer" className="btn-primary text-sm" aria-label="Take a free competitive exam practice test">
-                    Start Free Test <ArrowUpRight size={14} />
-                  </a>
-                  <a href="https://edu.onesmite.com/classrooms" target="_blank" rel="noopener noreferrer" className="btn-ghost text-sm" aria-label="Browse educator classrooms on Onesmite Educa">
-                    Explore Classrooms <ChevronRight size={14} />
-                  </a>
-                  <a href="https://edu.onesmite.com/plans" target="_blank" rel="noopener noreferrer" className="btn-ghost text-sm" aria-label="View Onesmite Educa pricing plans">
-                    View Plans <ChevronRight size={14} />
-                  </a>
-                  <a href="https://edu.onesmite.com/about-us" target="_blank" rel="noopener noreferrer" className="btn-ghost text-sm" aria-label="Learn more about Onesmite Educa mission and vision">
-                    Our Mission <ChevronRight size={14} />
-                  </a>
-                </div>
-              </div>
+      {/* ECONOMICS SECTION */}
+      <section className="relative z-10 py-12 md:py-16">
+        <div className="page-shell">
+          <div className="grid gap-12 lg:gap-20 lg:grid-cols-[1fr_1.1fr] lg:items-start">
+            <div className="lg:sticky lg:top-32">
+              <FadeUp delay={0.1}>
+                <div className="eyebrow eyebrow-dark mb-6">Coverage and Economics</div>
+                <h2 className="section-headline text-primary">
+                  Built for scale and viable unit economics.
+                </h2>
+                <p className="mt-6 text-[1.1rem] leading-[1.8] text-muted">
+                  Our marketplace expands as educators publish diverse content, while our zero-fixed-cost model keeps creators and institutes financially agile from day one.
+                </p>
+              </FadeUp>
             </div>
-          )}
 
-          {/* ── Teacher View ── */}
-          {activeTab === 'teacher' && (
-            <div>
-              <div className="flex items-start justify-between flex-wrap gap-4 mb-8">
-                <div>
-                  <div className="label-chip active inline-flex mb-3">
-                    <span className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse shrink-0" />
-                    Open for Educators
+            <div className="flex flex-col gap-8">
+              <FadeUp delay={0.2}>
+                <div className="card-dark rounded-2xl p-8 lg:p-10">
+                  <div className="mb-6 flex items-center gap-3 font-mono text-[0.8rem] font-semibold uppercase tracking-wider text-silver">
+                    <Target size={18} className="text-accent" />
+                    Supported Exam Categories
                   </div>
-                  <h2 className="font-heading text-[clamp(1.5rem,3vw,2rem)] font-bold text-primary tracking-[-0.02em] mb-2 max-w-[560px]">
-                    Launch Your Own Branded Test Platform. Zero Lock-in.
-                  </h2>
-                  <p className="text-[0.9375rem] text-muted leading-[1.7] max-w-[580px]">
-                    Enterprise-grade infrastructure at micro-scale pricing. Build AI-powered tests, host live classrooms, and earn direct payouts — without writing a single line of code or paying any upfront setup cost.
-                  </p>
+                  <div className="flex flex-wrap gap-3">
+                    {EXAMS.map((exam) => (
+                      <span key={exam} className="rounded-lg border border-white/10 bg-white/[0.02] px-5 py-2.5 text-sm font-medium text-primary hover:border-accent/40 hover:bg-accent/[0.02] transition-colors duration-300">
+                        {exam}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <a
-                  href="https://teacher.onesmite.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary shrink-0"
-                  aria-label="Join Onesmite Educa as an educator or teaching institute"
-                >
-                  Join as Educator <ArrowUpRight size={15} />
-                </a>
-              </div>
+              </FadeUp>
 
-              {/* Teacher Features Grid */}
-              <div className="grid grid-cols-[repeat(auto-fit,minmax(270px,1fr))] gap-3 mb-8">
-                {TEACHER_FEATURES.map((f) => (
-                  <FeatureCard key={f.label} {...f} />
+              <FadeUp delay={0.3}>
+                <div className="card-dark overflow-hidden rounded-2xl">
+                  <div className="flex items-center gap-3 border-b border-white/[0.06] bg-white/[0.02] px-8 py-6">
+                    <IndianRupee size={18} className="text-accent" />
+                    <span className="font-mono text-[0.8rem] font-semibold uppercase tracking-widest text-silver">
+                      Pay-as-you-go Pricing
+                    </span>
+                  </div>
+                  <div className="divide-y divide-white/[0.06]">
+                    {PRICING.map((item) => (
+                      <div key={item.label} className="grid gap-2 px-8 py-6 transition-colors hover:bg-white/[0.01] sm:grid-cols-[1fr_auto] sm:items-center">
+                        <div>
+                          <div className="font-sans font-bold text-primary text-[1.05rem]">{item.label}</div>
+                          <div className="mt-1 text-[0.88rem] text-muted">{item.note}</div>
+                        </div>
+                        <div className="font-sans text-[1.1rem] font-extrabold text-accent text-right whitespace-nowrap self-start sm:self-auto">
+                          {item.value}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </FadeUp>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* DIVIDER */}
+      <div className="page-shell"><hr className="divider-dark" /></div>
+
+      {/* SECURITY SECTION */}
+      <section className="relative z-10 py-12 md:py-16 bg-[#020a11]">
+        <div className="page-shell">
+          <div className="mb-16 lg:flex lg:items-end lg:justify-between lg:gap-16">
+            <FadeUp delay={0.1} className="max-w-[700px]">
+              <div className="eyebrow eyebrow-dark mb-6">Security Architecture</div>
+              <h2 className="section-headline text-primary">
+                Designed for trust before scale.
+              </h2>
+            </FadeUp>
+            <FadeUp delay={0.2} className="mt-8 lg:mt-0 max-w-[500px]">
+              <p className="text-[1.1rem] leading-[1.8] text-muted">
+                Exam delivery, financial workflows, and academic data require explicit security choices that are visible in the foundation, not bolted on later.
+              </p>
+            </FadeUp>
+          </div>
+
+          <div className="grid gap-6 md:grid-cols-2">
+            {SECURITY.map((item, index) => (
+              <SecurityCard key={item.title} index={index} {...item} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* DIVIDER */}
+      <div className="page-shell"><hr className="divider-dark" /></div>
+
+      {/* FAQ SECTION */}
+      <section className="relative z-10 py-12 md:py-16">
+        <div className="page-shell">
+          <div className="grid gap-12 lg:gap-20 lg:grid-cols-[1fr_1.3fr] lg:items-start">
+            <div className="lg:sticky lg:top-32">
+              <FadeUp delay={0.1}>
+                <div className="eyebrow eyebrow-dark mb-6">FAQ</div>
+                <h2 className="section-headline text-primary">
+                  Practical questions, direct answers.
+                </h2>
+              </FadeUp>
+            </div>
+
+            <FadeUp delay={0.2}>
+              <div className="card-dark overflow-hidden rounded-2xl">
+                {FAQS.map((faq, index) => (
+                  <div key={faq.q} className="border-b border-white/[0.06] last:border-b-0">
+                    <button
+                      onClick={() => setExpandedFaq(expandedFaq === index ? null : index)}
+                      className="group flex w-full items-center justify-between gap-6 px-8 py-7 text-left transition-colors hover:bg-white/[0.01]"
+                      aria-expanded={expandedFaq === index}
+                    >
+                      <span className="font-sans text-[1.1rem] font-bold text-primary group-hover:text-accent transition-colors">
+                        {faq.q}
+                      </span>
+                      <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border transition-all duration-300 ${expandedFaq === index
+                        ? 'rotate-180 bg-accent/10 border-accent/30 text-accent'
+                        : 'border-white/10 bg-white/[0.02] text-muted group-hover:border-white/20'
+                        }`}>
+                        <ChevronDown size={16} />
+                      </div>
+                    </button>
+                    <AnimatePresence>
+                      {expandedFaq === index && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                          className="overflow-hidden"
+                        >
+                          <div className="border-t border-white/[0.06] bg-black/20 px-8 py-6 text-[0.95rem] leading-[1.7] text-muted border-l-2 border-l-accent">
+                            {faq.a}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
                 ))}
               </div>
+            </FadeUp>
+          </div>
+        </div>
+      </section>
 
-              {/* PAYG Pricing Table */}
-              <div className="border border-border rounded-lg overflow-hidden mb-6">
-                <div className="px-6 py-4 border-b border-border bg-surface-2 flex items-center gap-2 flex-wrap">
-                  <Wallet size={15} className="text-accent" />
-                  <span className="font-mono text-[0.6875rem] text-muted tracking-[0.08em] uppercase">Pay-As-You-Go Pricing</span>
-                  <span className="ml-auto font-mono text-[0.6875rem] text-accent tracking-[0.06em]">No monthly fees. No lock-in.</span>
-                </div>
-                <div className="divide-y divide-border">
-                  {PRICING_ITEMS.map((item) => (
-                    <div key={item.label} className="px-6 py-4 flex items-center justify-between gap-4 bg-surface hover:bg-surface-2 transition-colors">
-                      <div>
-                        <div className="text-[0.9375rem] text-primary font-medium">{item.label}</div>
-                        <div className="text-[0.8125rem] text-muted">{item.note}</div>
-                      </div>
-                      <div className="font-mono text-[0.9375rem] font-semibold text-primary shrink-0">{item.value}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+      {/* CTA SECTION */}
+      <section className="relative z-10 pb-16 md:pb-24 pt-0">
+        <div className="page-shell">
+          <FadeUp delay={0.1}>
+            <div className="shimmer-card rounded-3xl border border-white/10 bg-gradient-to-br from-white/[0.04] to-white/[0.01] p-10 md:p-16 lg:p-20 backdrop-blur-xl relative overflow-hidden">
+              <div className="pointer-events-none absolute inset-0 bg-grid-dark opacity-30 mix-blend-overlay" />
+              <div className="pointer-events-none absolute -right-40 -top-40 h-[500px] w-[500px] rounded-full bg-accent/10 blur-[120px]" />
 
-              {/* Educator Advantage CTA */}
-              <div className="border border-border rounded-lg p-6 bg-surface relative overflow-hidden">
-                <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-accent/30 to-transparent" />
-                <blockquote className="font-heading text-[1.0625rem] text-primary italic leading-[1.65] mb-3">
-                  "An enterprise-grade EdTech platform typically costs ₹2–7 Lakhs/year to build. We handle all of it — <span className="text-accent not-italic">for free</span>."
-                </blockquote>
-                <p className="text-[0.875rem] text-muted leading-[1.6] mb-5">
-                  Servers, security, analytics, billing compliance, and infrastructure — all managed automatically. Focus entirely on teaching.
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  <a href="https://teacher.onesmite.com" target="_blank" rel="noopener noreferrer" className="btn-primary text-sm" aria-label="Create a free educator account on Onesmite Educa">
-                    Create Educator Account <ArrowUpRight size={14} />
+              <div className="relative z-10 flex flex-col gap-10 lg:flex-row lg:items-center lg:justify-between">
+                <div className="max-w-[640px]">
+                  <div className="eyebrow eyebrow-dark mb-6">
+                    Live Vertical
+                  </div>
+                  <h2 className="section-headline text-primary tracking-tight">
+                    Start building with <span className="text-gradient-saffron">Onesmite Educa.</span>
+                  </h2>
+                  <p className="mt-6 text-[1.1rem] leading-[1.75] text-muted">
+                    Join the infrastructure that empowers students to succeed and helps educators scale their operations seamlessly.
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-4 sm:flex-row sm:items-center shrink-0">
+                  <a href="https://edu.onesmite.com" target="_blank" rel="noopener noreferrer" className="btn btn-primary group py-4 px-8 text-sm font-semibold tracking-wide rounded-xl shadow-[0_12px_36px_rgba(232,98,26,0.3)]">
+                    Student Platform
+                    <ArrowUpRight size={18} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </a>
-                  <a href="https://teacher.onesmite.com/docs" target="_blank" rel="noopener noreferrer" className="btn-ghost text-sm" aria-label="Read the full Onesmite Educa educator documentation">
-                    Full Documentation <ChevronRight size={14} />
+                  <a href="https://teacher.onesmite.com" target="_blank" rel="noopener noreferrer" className="btn btn-ghost-dark group py-4 px-8 text-sm font-semibold tracking-wide rounded-xl">
+                    Educator Portal
+                    <ArrowUpRight size={18} className="transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                   </a>
                 </div>
               </div>
             </div>
-          )}
-        </SectionWrapper>
-      </div>
-
-      <hr className="section-divider" />
-
-      {/* ── Security & Compliance ── */}
-      <div className="max-w-[1200px] mx-auto py-16 px-6">
-        <SectionWrapper>
-          <div className="label-chip mb-5 inline-flex">Platform Architecture</div>
-          <h2 className="font-heading text-[clamp(1.5rem,3vw,2rem)] font-bold text-primary tracking-[-0.02em] mb-3 max-w-[540px]">
-            Built Secure. Engineered to Scale.
-          </h2>
-          <p className="text-[0.9375rem] text-muted leading-[1.7] max-w-[580px] mb-10">
-            Every layer of Onesmite Educa is designed with a security-first architecture, Indian regulatory compliance, and 99.99% uptime SLA — protecting both educators and students at any scale.
-          </p>
-
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-3 mb-6">
-            {SECURITY_ITEMS.map((item) => (
-              <div key={item.title} className="card rounded-lg group">
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-8 h-8 rounded-md bg-surface-2 border border-border flex items-center justify-center shrink-0 group-hover:border-border-strong transition-colors">
-                    <item.icon size={14} className="text-accent" />
-                  </div>
-                  <span className="text-[0.9375rem] font-semibold text-primary">{item.title}</span>
-                </div>
-                <p className="text-[0.875rem] text-muted leading-[1.6] pl-11">{item.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Compliance Tags */}
-          <div className="border border-border rounded-lg p-5 bg-surface flex flex-wrap gap-4 items-center justify-between">
-            <div className="flex flex-wrap gap-2 items-center">
-              {['IT Act 2000', 'SPDI Rules 2011', 'DPDPA 2023', 'GST Compliant', 'TDS Automated', 'KYC Required'].map((tag) => (
-                <span key={tag} className="font-mono text-[0.75rem] text-muted border border-border rounded px-2.5 py-1">
-                  {tag}
-                </span>
-              ))}
-            </div>
-            <div className="font-mono text-[0.6875rem] text-muted tracking-[0.06em]">
-              Security disclosures: contact@onesmite.com
-            </div>
-          </div>
-        </SectionWrapper>
-      </div>
-
-      <hr className="section-divider" />
-
-      {/* ── FAQ ── */}
-      <div className="max-w-[1200px] mx-auto py-16 px-6">
-        <SectionWrapper>
-          <div className="label-chip mb-5 inline-flex">FAQ</div>
-          <h2 className="font-heading text-[clamp(1.5rem,3vw,2rem)] font-bold text-primary tracking-[-0.02em] mb-3">
-            Common Questions
-          </h2>
-          <p className="text-[0.9375rem] text-muted leading-[1.7] max-w-[480px] mb-10">
-            Everything you need to know about Onesmite Educa, pricing, and how the platform works for students and educators.
-          </p>
-
-          <div className="divide-y divide-border border border-border rounded-lg overflow-hidden">
-            {faqs.map((faq, i) => (
-              <div key={i} className="bg-surface">
-                <button
-                  onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
-                  className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left hover:bg-surface-2 transition-colors cursor-pointer"
-                  aria-expanded={expandedFaq === i}
-                  aria-controls={`faq-answer-${i}`}
-                >
-                  <span className="text-[0.9375rem] font-medium text-primary">{faq.q}</span>
-                  <ChevronDown
-                    size={16}
-                    className={`text-muted shrink-0 transition-transform duration-200 ${expandedFaq === i ? 'rotate-180' : ''}`}
-                  />
-                </button>
-                {expandedFaq === i && (
-                  <div
-                    id={`faq-answer-${i}`}
-                    className="px-6 pb-5 text-[0.9375rem] text-muted leading-[1.7] border-t border-border pt-4 bg-surface-2"
-                  >
-                    {faq.a}
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </SectionWrapper>
-      </div>
-
-      <hr className="section-divider" />
-
-      {/* ── Product Cards + Future Verticals ── */}
-      <div className="max-w-[1200px] mx-auto py-16 px-6">
-        <SectionWrapper delay={100}>
-          <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-4">
-            {/* Onesmite Educa */}
-            <article className="border border-border rounded-lg bg-surface p-6">
-              <div className="mb-3">
-                <span className="label-chip active">Live · Early Access</span>
-              </div>
-              <h2 className="font-heading text-[1.25rem] font-bold text-primary tracking-[-0.02em] mb-2.5">
-                Onesmite Educa
-              </h2>
-              <p className="text-[0.9375rem] text-muted leading-[1.65] mb-5">
-                AI-powered competitive exam preparation — connecting students across India with verified educators in a production-grade learning ecosystem.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <a
-                  href="https://edu.onesmite.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-primary text-sm"
-                  aria-label="Visit Onesmite Educa student platform"
-                >
-                  Student Platform <ArrowUpRight size={13} />
-                </a>
-                <a
-                  href="https://teacher.onesmite.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="btn-ghost text-sm"
-                  aria-label="Join Onesmite Educa educator portal"
-                >
-                  Educator Portal <ArrowUpRight size={13} />
-                </a>
-              </div>
-            </article>
-
-            {/* Future Verticals */}
-            <article className="border border-border rounded-lg bg-surface p-6">
-              <div className="mb-3">
-                <span className="label-chip research">Research Phase</span>
-              </div>
-              <h2 className="font-heading text-[1.25rem] font-bold text-primary tracking-[-0.02em] mb-2.5">
-                Additional Verticals
-              </h2>
-              <p className="text-[0.9375rem] text-muted leading-[1.65]">
-                We are actively researching additional product verticals in adjacent infrastructure categories. Each future product will follow the same production-grade, long-horizon build philosophy as Onesmite Educa. Details will be shared publicly when development formally begins.
-              </p>
-            </article>
-          </div>
-        </SectionWrapper>
-      </div>
+          </FadeUp>
+        </div>
+      </section>
     </main>
   )
 }

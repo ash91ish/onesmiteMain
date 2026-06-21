@@ -1,33 +1,36 @@
+import Link from 'next/link'
 import SectionWrapper from './SectionWrapper'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Mail } from 'lucide-react'
 
-// Repurposed: FooterCTA section for the Home page
 export default function Connect() {
   return (
-    <section aria-labelledby="cta-heading">
+    <section className="section-band" aria-labelledby="cta-heading">
       <SectionWrapper>
-        <div className="border border-border bg-surface p-[clamp(2.5rem,5vw,4rem)] relative overflow-hidden">
-          {/* Subtle accent glow */}
-          <div className="absolute -bottom-[80px] -right-[80px] w-[300px] h-[300px] bg-[radial-gradient(circle,rgba(92,107,255,0.07)_0%,transparent_70%)] pointer-events-none" />
-
-          <div className="relative z-10 max-w-[560px]">
-            <h2
-              id="cta-heading"
-              className="font-heading text-[clamp(1.625rem,3vw,2.125rem)] font-bold tracking-[-0.025em] text-primary mb-3.5"
-            >
-              Interested in what we're building?
-            </h2>
-            <p className="text-base text-muted leading-[1.65] mb-8">
-              Reach out to start a conversation.
-            </p>
-            <a
-              href="mailto:contact@onesmite.com"
-              className="btn-primary"
-              aria-label="Email contact@onesmite.com"
-            >
-              contact@onesmite.com
-              <ArrowRight size={16} />
-            </a>
+        <div className="premium-panel p-[clamp(1.5rem,5vw,4rem)]">
+          <div className="relative z-10 grid gap-10 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div>
+              <div className="section-kicker mb-5">Start a conversation</div>
+              <h2
+                id="cta-heading"
+                className="max-w-[760px] font-heading text-[clamp(2rem,5vw,3.4rem)] font-extrabold leading-[1.05] text-primary"
+              >
+                Building, teaching, investing, or partnering in the same direction?
+              </h2>
+              <p className="mt-5 max-w-[560px] text-base leading-[1.8] text-muted">
+                Reach out for educator onboarding, product partnerships, integration conversations,
+                or long-term alignment around Indian software infrastructure.
+              </p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row lg:flex-col">
+              <a href="mailto:contact@onesmite.com" className="btn-primary" aria-label="Email contact@onesmite.com">
+                <Mail size={16} />
+                contact@onesmite.com
+              </a>
+              <Link href="/contact" className="btn-ghost">
+                Contact page
+                <ArrowRight size={16} />
+              </Link>
+            </div>
           </div>
         </div>
       </SectionWrapper>

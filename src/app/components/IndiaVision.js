@@ -1,55 +1,56 @@
 import SectionWrapper from './SectionWrapper'
-import { Layers, DollarSign, Cpu } from 'lucide-react'
+import { Cpu, Coins, Layers3 } from 'lucide-react'
 
 const REASONS = [
   {
-    icon: Layers,
-    heading: 'Fragmented Preparation',
-    body: 'Competitive exam preparation remains fragmented across tools and platforms, creating friction for both students and educators.',
+    icon: Layers3,
+    heading: 'Fragmented preparation',
+    body: 'Students move between scattered tests, notes, rankings, and classrooms. Educators lose time stitching together workflows that should be infrastructure.',
   },
   {
-    icon: DollarSign,
-    heading: 'Limited Monetization for Educators',
-    body: 'Many educators lack simple, reliable ways to create, manage, and monetize their assessments and teaching materials.',
+    icon: Coins,
+    heading: 'Weak educator economics',
+    body: 'Individual teachers and small institutes need direct monetization, lower operating cost, and trustworthy distribution without building software teams.',
   },
   {
     icon: Cpu,
-    heading: 'Surface-Level AI Adoption',
-    body: 'AI adoption in Indian education often focuses on surface-level features rather than meaningful, outcome-driven infrastructure.',
+    heading: 'Shallow AI adoption',
+    body: 'Most AI features stop at novelty. Onesmite focuses on decision support, post-test intelligence, automation, and measurable learning workflows.',
   },
 ]
 
-// Repurposed: WhyIndia section for the Home page
 export default function IndiaVision() {
   return (
-    <section aria-labelledby="why-india-heading">
+    <section className="section-band" aria-labelledby="why-this-matters-heading">
       <SectionWrapper>
-        <div className="label-chip mb-5 inline-flex">
-          Why India Needs Better Infrastructure
+        <div className="section-kicker mb-5">Why this matters</div>
+        <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <h2
+            id="why-this-matters-heading"
+            className="max-w-[700px] font-heading text-[clamp(2rem,5vw,3.3rem)] font-extrabold leading-[1.05] text-primary"
+          >
+            The world does not need louder software. It needs better operating rails.
+          </h2>
+          <p className="max-w-[390px] text-[0.95rem] leading-[1.75] text-muted">
+            The first vertical starts with competitive exam preparation because the pain is daily,
+            measurable, and large enough to demand real infrastructure.
+          </p>
         </div>
-        <h2
-          id="why-india-heading"
-          className="font-heading text-[clamp(1.625rem,3vw,2.25rem)] font-bold tracking-[-0.025em] text-primary mb-12 max-w-[560px]"
-        >
-          The gaps we're building to close.
-        </h2>
       </SectionWrapper>
 
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(280px,1fr))] gap-6">
+      <div className="mt-10 grid gap-4 lg:grid-cols-3">
         {REASONS.map((item, i) => {
           const Icon = item.icon
           return (
-            <SectionWrapper key={item.heading} delay={i * 80}>
-              <article className="p-7 border border-border bg-surface h-full transition-colors duration-200 ease-out hover:border-white/20">
-                <div className="flex items-center justify-center w-10 h-10 border border-white/10 mb-5 bg-white/[0.02]">
-                  <Icon size={18} className="text-accent" />
+            <SectionWrapper key={item.heading} delay={i * 90}>
+              <article className="card h-full">
+                <div className="relative z-10">
+                  <div className="mb-7 grid h-12 w-12 place-items-center border border-white/10 bg-white/[0.045]">
+                    <Icon size={20} className="text-accent" />
+                  </div>
+                  <h3 className="font-heading text-xl font-bold text-primary">{item.heading}</h3>
+                  <p className="mt-3 text-[0.95rem] leading-[1.75] text-muted">{item.body}</p>
                 </div>
-                <h3 className="font-heading text-[1.0625rem] font-bold text-primary mb-2.5 tracking-[-0.01em]">
-                  {item.heading}
-                </h3>
-                <p className="text-[0.9375rem] text-muted leading-[1.65]">
-                  {item.body}
-                </p>
               </article>
             </SectionWrapper>
           )

@@ -1,18 +1,23 @@
-import Hero from './components/Hero'
-import About from './components/About'
-import IndiaVision from './components/IndiaVision'
-import Features from './components/Features'
-import Connect from './components/Connect'
+import HeroSection from './components/HeroSection'
+import VisionSection from './components/VisionSection'
+import WhyOnesmiteSection from './components/WhyOnesmiteSection'
+import FounderSection from './components/FounderSection'
+import EcosystemSection from './components/EcosystemSection'
+import EducaSection from './components/EducaSection'
+import ImpactSection from './components/ImpactSection'
+import TechnologyFutureSection from './components/TechnologyFutureSection'
+import TimelineSection from './components/TimelineSection'
+import FinalStatementSection from './components/FinalStatementSection'
 
 export const metadata = {
-  title: 'Onesmite — Building India\'s Next-Generation Tech Infrastructure',
+  title: "Onesmite — Building the Digital Future of India",
   description:
-    'Onesmite is a technology holding company building production-grade software infrastructure for India. Explore our first product, Onesmite Educa.',
+    'Onesmite is a long-term technology company creating indigenous software, intelligent systems, and digital infrastructure for India. Building world-class technology designed, developed, and operated from India.',
   alternates: { canonical: 'https://onesmite.com' },
   openGraph: {
-    title: 'Onesmite — Building India\'s Next-Generation Tech Infrastructure',
+    title: "Onesmite — Building the Digital Future of India",
     description:
-      'Onesmite is a technology holding company building production-grade software infrastructure for India.',
+      'Creating indigenous technology, intelligent systems, and digital infrastructure for India\'s next generation.',
     url: 'https://onesmite.com',
     siteName: 'Onesmite',
     images: [{ url: '/onesmite-og.webp', width: 1200, height: 630 }],
@@ -22,25 +27,35 @@ export const metadata = {
 export default function HomePage() {
   return (
     <main>
-      <Hero />
+      {/* 1. Cinematic hero — dark navy + 3D Global network */}
+      <HeroSection />
 
-      <div className="max-w-[1200px] mx-auto px-6">
-        <div className="border-t border-border pt-24 pb-8">
-          <About />
-        </div>
+      {/* 2. Vision — light/cream storytelling section */}
+      <VisionSection />
 
-        <div className="border-t border-border pt-24 pb-8">
-          <IndiaVision />
-        </div>
+      {/* 3. Why Onesmite — dark navy, founder voice */}
+      <WhyOnesmiteSection />
 
-        <div className="border-t border-border pt-24 pb-8">
-          <Features />
-        </div>
+      {/* 4. Founder — light, mission-focused */}
+      <FounderSection />
 
-        <div className="border-t border-border pt-24 pb-24">
-          <Connect />
-        </div>
-      </div>
+      {/* 5. Ecosystem — deep dark, interactive cards */}
+      <EcosystemSection />
+
+      {/* 6. Onesmite Educa — white-grey, product showcase */}
+      <EducaSection />
+
+      {/* 7. Impact — dark pitch, animated stats */}
+      <ImpactSection />
+
+      {/* 8. Technology Future — light, 7 domain cards */}
+      <TechnologyFutureSection />
+
+      {/* 9. Timeline — near-black, 5-stage interactive */}
+      <TimelineSection />
+
+      {/* 10. Final Statement — cinematic dark, full-screen CTA */}
+      <FinalStatementSection />
     </main>
   )
 }

@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { submitContactForm } from '@/app/actions/contact'
-import { CheckCircle, Loader2 } from 'lucide-react'
+import { CheckCircle, Loader2, Send } from 'lucide-react'
 
 export default function ContactForm() {
   const [values, setValues] = useState({ name: '', email: '', subject: '', message: '' })
@@ -11,13 +11,14 @@ export default function ContactForm() {
   const [serverError, setServerError] = useState('')
 
   function validate() {
-    const e = {}
-    if (!values.name.trim())    e.name    = 'Name is required.'
-    if (!values.email.trim())   e.email   = 'Email is required.'
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email))
-      e.email = 'Please enter a valid email address.'
-    if (!values.message.trim()) e.message = 'Message is required.'
-    return e
+    const nextErrors = {}
+    if (!values.name.trim()) nextErrors.name = 'Name is required.'
+    if (!values.email.trim()) nextErrors.email = 'Email is required.'
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email)) {
+      nextErrors.email = 'Please enter a valid email address.'
+    }
+    if (!values.message.trim()) nextErrors.message = 'Message is required.'
+    return nextErrors
   }
 
   function handleChange(e) {
@@ -29,9 +30,9 @@ export default function ContactForm() {
 
   async function handleSubmit(e) {
     e.preventDefault()
-    const errs = validate()
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs)
+    const validationErrors = validate()
+    if (Object.keys(validationErrors).length > 0) {
+      setErrors(validationErrors)
       return
     }
 
@@ -52,7 +53,7 @@ export default function ContactForm() {
       setSubmitted(true)
     } catch (err) {
       console.error('Contact form submission failed:', err)
-      setServerError(err.message || 'Something went wrong. Please try emailing us at contact@onesmite.com')
+      setServerError(err.message || 'Something went wrong. Please email us at contact@onesmite.com.')
     } finally {
       setLoading(false)
     }
@@ -63,37 +64,25 @@ export default function ContactForm() {
       <div
         role="status"
         aria-live="polite"
-        className="p-8 border border-[rgba(92,107,255,0.3)] bg-[rgba(92,107,255,0.06)] text-center rounded-lg"
+        className="border border-emerald-400/25 bg-emerald-400/[0.08] p-7 text-center"
       >
-        <div className="flex justify-center mb-4">
-          <CheckCircle size={36} className="text-accent" />
+        <div className="mb-4 flex justify-center">
+          <CheckCircle size={38} className="text-[#62d28f]" />
         </div>
-        <div className="font-heading text-lg font-bold text-primary mb-2">
-          Message received.
-        </div>
-        <p className="text-[0.9375rem] text-muted">
-          Thanks for reaching out — we&apos;ll be in touch soon at <span className="text-accent">{values.email}</span>.
+        <div className="font-heading text-xl font-extrabold text-primary">Message received.</div>
+        <p className="mt-2 text-[0.95rem] leading-[1.7] text-muted">
+          Thanks for reaching out. We will reply at <span className="font-semibold text-primary">{values.email}</span>.
         </p>
       </div>
     )
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      noValidate
-      className="flex flex-col gap-5"
-      aria-label="Contact form"
-    >
-      {/* Name */}
-      <div>
-        <label
-          htmlFor="contact-name"
-          className="block font-mono text-[0.6875rem] text-muted tracking-[0.08em] uppercase mb-2"
-        >
-          Name <span className="text-[#FF6B6B]">*</span>
-        </label>
-        <input
+    <form onSubmit={handleSubmit} noValidate className="grid gap-5" aria-label="Contact form">
+      <div className="grid gap-5 sm:grid-cols-2">
+        <Field
+          label="Name"
+          required
           id="contact-name"
           name="name"
           type="text"
@@ -101,27 +90,11 @@ export default function ContactForm() {
           value={values.name}
           onChange={handleChange}
           placeholder="Your full name"
-          className="form-input"
-          aria-required="true"
-          aria-invalid={!!errors.name}
-          aria-describedby={errors.name ? 'name-error' : undefined}
+          error={errors.name}
         />
-        {errors.name && (
-          <p id="name-error" role="alert" className="text-[0.8125rem] text-[#FF6B6B] mt-1.5">
-            {errors.name}
-          </p>
-        )}
-      </div>
-
-      {/* Email */}
-      <div>
-        <label
-          htmlFor="contact-email"
-          className="block font-mono text-[0.6875rem] text-muted tracking-[0.08em] uppercase mb-2"
-        >
-          Email <span className="text-[#FF6B6B]">*</span>
-        </label>
-        <input
+        <Field
+          label="Email"
+          required
           id="contact-email"
           name="email"
           type="email"
@@ -129,85 +102,85 @@ export default function ContactForm() {
           value={values.email}
           onChange={handleChange}
           placeholder="you@example.com"
-          className="form-input"
-          aria-required="true"
-          aria-invalid={!!errors.email}
-          aria-describedby={errors.email ? 'email-error' : undefined}
-        />
-        {errors.email && (
-          <p id="email-error" role="alert" className="text-[0.8125rem] text-[#FF6B6B] mt-1.5">
-            {errors.email}
-          </p>
-        )}
-      </div>
-
-      {/* Subject (optional) */}
-      <div>
-        <label
-          htmlFor="contact-subject"
-          className="block font-mono text-[0.6875rem] text-muted tracking-[0.08em] uppercase mb-2"
-        >
-          Subject <span className="text-muted opacity-40">(optional)</span>
-        </label>
-        <input
-          id="contact-subject"
-          name="subject"
-          type="text"
-          value={values.subject}
-          onChange={handleChange}
-          placeholder="e.g. Partnership, Investor inquiry, Educator onboarding..."
-          className="form-input"
+          error={errors.email}
         />
       </div>
 
-      {/* Message */}
+      <Field
+        label="Subject"
+        id="contact-subject"
+        name="subject"
+        type="text"
+        value={values.subject}
+        onChange={handleChange}
+        placeholder="General inquiry, partnership, product support, feedback..."
+      />
+
       <div>
-        <label
-          htmlFor="contact-message"
-          className="block font-mono text-[0.6875rem] text-muted tracking-[0.08em] uppercase mb-2"
-        >
-          Message <span className="text-[#FF6B6B]">*</span>
+        <label htmlFor="contact-message" className="mb-2 block font-mono text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-muted">
+          Message <span className="text-[var(--danger)]">*</span>
         </label>
         <textarea
           id="contact-message"
           name="message"
-          rows={5}
+          rows={6}
           value={values.message}
           onChange={handleChange}
-          placeholder="What would you like to discuss?"
-          className="form-input min-h-[120px] resize-y"
+          placeholder="How can we help you? Describe your query..."
+          className="form-input min-h-[150px] resize-y"
           aria-required="true"
           aria-invalid={!!errors.message}
           aria-describedby={errors.message ? 'message-error' : undefined}
         />
         {errors.message && (
-          <p id="message-error" role="alert" className="text-[0.8125rem] text-[#FF6B6B] mt-1.5">
+          <p id="message-error" role="alert" className="mt-2 text-[0.82rem] text-[var(--danger)]">
             {errors.message}
           </p>
         )}
       </div>
 
-      {/* Server error */}
       {serverError && (
-        <p role="alert" className="text-[0.8125rem] text-[#FF6B6B] -mt-1">
+        <p role="alert" className="text-[0.86rem] text-[var(--danger)]">
           {serverError}
         </p>
       )}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="btn-primary self-start flex items-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed"
-      >
+      <button type="submit" disabled={loading} className="btn btn-primary w-full disabled:cursor-not-allowed disabled:opacity-60 sm:w-fit">
         {loading ? (
           <>
-            <Loader2 size={15} className="animate-spin" />
-            Sending…
+            <Loader2 size={16} className="animate-spin" />
+            Sending
           </>
         ) : (
-          'Send Message'
+          <>
+            <Send size={16} />
+            Send message
+          </>
         )}
       </button>
     </form>
+  )
+}
+
+function Field({ label, required = false, error, id, ...props }) {
+  return (
+    <div>
+      <label htmlFor={id} className="mb-2 block font-mono text-[0.7rem] font-semibold uppercase tracking-[0.08em] text-muted">
+        {label} {required && <span className="text-[var(--danger)]">*</span>}
+      </label>
+      <input
+        id={id}
+        className="form-input"
+        aria-required={required ? 'true' : undefined}
+        aria-invalid={!!error}
+        aria-describedby={error ? `${id}-error` : undefined}
+        {...props}
+      />
+      {error && (
+        <p id={`${id}-error`} role="alert" className="mt-2 text-[0.82rem] text-[var(--danger)]">
+          {error}
+        </p>
+      )}
+    </div>
   )
 }

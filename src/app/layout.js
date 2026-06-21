@@ -1,7 +1,8 @@
-import { Syne, DM_Sans, JetBrains_Mono } from 'next/font/google'
+import { Syne, Inter, JetBrains_Mono } from 'next/font/google'
 import './globals.css'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import ComingSoonToast from './components/ComingSoonToast'
 
 const syne = Syne({
   variable: '--font-syne',
@@ -10,28 +11,28 @@ const syne = Syne({
   display: 'swap',
 })
 
-const dmSans = DM_Sans({
-  variable: '--font-dm-sans',
+const inter = Inter({
+  variable: '--font-inter',
   subsets: ['latin'],
-  weight: ['400', '500', '600'],
+  weight: ['400', '500', '600', '700'],
   display: 'swap',
 })
 
 const jetbrainsMono = JetBrains_Mono({
   variable: '--font-jetbrains-mono',
   subsets: ['latin'],
-  weight: ['400', '500'],
+  weight: ['400', '500', '600'],
   display: 'swap',
 })
 
 export const viewport = {
-  themeColor: '#0A0A0F',
+  themeColor: '#020d16',
 }
 
 export const metadata = {
-  title: 'Onesmite — Building India\'s Next-Generation Tech Infrastructure',
+  title: "Onesmite — Building the Digital Future",
   description:
-    'Onesmite is a technology holding company building production-grade software infrastructure for India. Our first product, Onesmite Educa, serves the competitive exam ecosystem.',
+    'Onesmite is a long-term technology company building sovereign software, intelligent systems, and digital infrastructure. Creating world-class technology designed for scale.',
   metadataBase: new URL('https://onesmite.com'),
   alternates: {
     canonical: '/',
@@ -39,15 +40,16 @@ export const metadata = {
   authors: [{ name: 'Onesmite' }],
   creator: 'Onesmite',
   publisher: 'Onesmite',
+  keywords: ['enterprise technology', 'sovereign software', 'digital infrastructure', 'AI platforms', 'EdTech infrastructure', 'Onesmite'],
   formatDetection: {
     email: false,
     address: false,
     telephone: false,
   },
   openGraph: {
-    title: 'Onesmite — Building India\'s Next-Generation Tech Infrastructure',
+    title: "Onesmite — Building the Digital Future",
     description:
-      'Onesmite is a technology holding company building production-grade software infrastructure for India.',
+      'Creating sovereign technology, intelligent systems, and digital infrastructure for the next generation. World-class technology built for global scale.',
     url: 'https://onesmite.com',
     siteName: 'Onesmite',
     images: [
@@ -55,11 +57,17 @@ export const metadata = {
         url: '/onesmite-og.webp',
         width: 1200,
         height: 630,
-        alt: 'Onesmite — Building India\'s Next-Generation Tech Infrastructure',
+        alt: 'Onesmite — Building the Digital Future of India',
       },
     ],
     locale: 'en_IN',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Onesmite — Building the Digital Future",
+    description: 'Creating sovereign technology, intelligent systems, and digital infrastructure for the next generation.',
+    images: ['/onesmite-og.webp'],
   },
   robots: {
     index: true,
@@ -84,11 +92,12 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body
-        className={`${syne.variable} ${dmSans.variable} ${jetbrainsMono.variable} antialiased min-h-screen overflow-x-clip bg-background text-primary`}
+        className={`${syne.variable} ${inter.variable} ${jetbrainsMono.variable} antialiased min-h-screen overflow-x-clip`}
       >
         <Header />
         {children}
         <Footer />
+        <ComingSoonToast />
       </body>
     </html>
   )
