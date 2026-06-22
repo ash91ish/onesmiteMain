@@ -1,12 +1,20 @@
 'use client'
 
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, useEffect } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useInView } from 'framer-motion'
 import * as THREE from 'three'
 
-function BrainVines({ count = 250, maxDistance = 3.5 }) {
+function BrainVines({ count = 120, maxDistance = 4.0 }) {
   const groupRef = useRef()
+  const scrollYRef = useRef(0)
+
+  useEffect(() => {
+    const onScroll = () => { scrollYRef.current = window.scrollY }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
 
   const [positions, linePositions, lineColors] = useMemo(() => {
     // Generate random points in a sphere to look like a brain/neural network
@@ -69,9 +77,15 @@ function BrainVines({ count = 250, maxDistance = 3.5 }) {
 
   useFrame((state) => {
     if (groupRef.current) {
-      // Smooth continuous rotation over time without lerp/scroll jumps
-      groupRef.current.rotation.y = state.clock.elapsedTime * 0.05
-      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.1
+      // Subtle, premium scroll interaction (slower speed)
+      const scrollProgress = scrollYRef.current * 0.002
+      
+      // Moderate target rotation for a smoother tilt
+      const targetY = state.clock.elapsedTime * 0.05 + Math.sin(scrollProgress) * 0.8
+      const targetX = Math.sin(state.clock.elapsedTime * 0.2) * 0.1 + Math.cos(scrollProgress * 0.8) * 0.3
+      
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetY, 0.08)
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetX, 0.08)
       
       // Add a slight floating / breathing effect
       groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.5
