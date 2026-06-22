@@ -80,7 +80,7 @@ export default function FounderSection() {
             itemType="https://schema.org/Person"
           >
             <meta itemProp="worksFor" content="Onesmite" />
-            <meta itemProp="image" content="/ashish.webp" />
+            <meta itemProp="image" content="/Ashish.webp" />
             <meta itemProp="description" content="Ashish Kumar, Founder and CEO of Onesmite, leading sovereign digital infrastructure from Bihar, India." />
             
             {/* Founder Photo */}
@@ -98,7 +98,7 @@ export default function FounderSection() {
               }}
             >
               <Image 
-                src="/ashish.webp" 
+                src="/Ashish.webp" 
                 alt="Ashish Kumar - Founder & CEO of Onesmite" 
                 fill
                 sizes="180px"

@@ -136,7 +136,7 @@ function LuxuryWatch() {
   const secondHandRef   = useRef(null)
   const outerBezelRef   = useRef(null)
   const saffronRingRef  = useRef(null)
-  const scrollYRef      = useRef(0)
+  const scrollYRef = useRef(0)
 
   useEffect(() => {
     const onScroll = () => { scrollYRef.current = window.scrollY }
@@ -148,36 +148,18 @@ function LuxuryWatch() {
   useFrame((state, delta) => {
     const t = state.clock.elapsedTime
 
-    // ── Scroll parallax (snappy) ──
+    // ── Bounded Scroll Parallax + Gentle Float ──
     if (groupRef.current) {
-      // Responsive scroll intensity: gracefully step down on larger screens
-      let scrollMultiplierX = 0.0020
-      let scrollMultiplierY = 0.0020
+      // Use scrollY to drive rotation, but wrap it in sin/cos so it never spins out of bounds.
+      // We also add a tiny bit of elapsed time `t` so it still gently floats even when not scrolling.
+      // Increased multiplier to 0.008 for faster scroll response, and amplitude to 0.45 for more tilt.
+      const scrollProgress = scrollYRef.current * 0.008
       
-      if (typeof window !== 'undefined') {
-        const w = window.innerWidth
-        if (w >= 1920) {      // 3xl
-          scrollMultiplierX = 0.0009
-          scrollMultiplierY = 0.00178
-        } else if (w >= 1536) { // 2xl
-          scrollMultiplierX = 0.0010
-          scrollMultiplierY = 0.0018
-        } else if (w >= 1280) { // xl
-          scrollMultiplierX = 0.0010
-          scrollMultiplierY = 0.0019
-        } else if (w >= 1024) { // lg
-          scrollMultiplierX = 0.0010
-          scrollMultiplierY = 0.00194
-        } else if (w >= 768) {  // md
-          scrollMultiplierX = 0.0010
-          scrollMultiplierY = 0.0019
-        }
-      }
+      const tx = 1.15 + Math.sin(scrollProgress + t * 0.2) * 0.45
+      const ty = 0.1 + Math.cos(scrollProgress + t * 0.1) * 0.45
       
-      const tx = 1.15 + scrollYRef.current * scrollMultiplierX
-      const ty = 0.01 + scrollYRef.current * scrollMultiplierY
-      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, tx, 0.14)
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, ty, 0.14)
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, tx, 0.1)
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, ty, 0.1)
     }
 
     // ── Bezel slow rotation ──
