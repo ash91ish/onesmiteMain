@@ -14,22 +14,14 @@ const NAV_ITEMS = [
   { href: '/contact', label: 'Contact' },
 ]
 
+import { motion, useScroll } from 'framer-motion'
+
 function ScrollProgress() {
-  const [progress, setProgress] = useState(0)
-  useEffect(() => {
-    const update = () => {
-      const el = document.documentElement
-      const scrollTop = el.scrollTop || document.body.scrollTop
-      const scrollHeight = el.scrollHeight - el.clientHeight
-      setProgress(scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0)
-    }
-    window.addEventListener('scroll', update, { passive: true })
-    return () => window.removeEventListener('scroll', update)
-  }, [])
+  const { scrollYProgress } = useScroll()
   return (
-    <div
+    <motion.div
       className="scroll-progress"
-      style={{ width: `${progress}%` }}
+      style={{ width: '100%', scaleX: scrollYProgress, transformOrigin: 'left' }}
       aria-hidden="true"
     />
   )

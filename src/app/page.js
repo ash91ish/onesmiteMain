@@ -1,13 +1,15 @@
+import dynamic from 'next/dynamic'
 import HeroSection from './components/HeroSection'
-import VisionSection from './components/VisionSection'
-import WhyOnesmiteSection from './components/WhyOnesmiteSection'
-import FounderSection from './components/FounderSection'
-import EcosystemSection from './components/EcosystemSection'
-import EducaSection from './components/EducaSection'
-import ImpactSection from './components/ImpactSection'
-import TechnologyFutureSection from './components/TechnologyFutureSection'
-import TimelineSection from './components/TimelineSection'
-import FinalStatementSection from './components/FinalStatementSection'
+
+const VisionSection = dynamic(() => import('./components/VisionSection'))
+const WhyOnesmiteSection = dynamic(() => import('./components/WhyOnesmiteSection'))
+const FounderSection = dynamic(() => import('./components/FounderSection'))
+const EcosystemSection = dynamic(() => import('./components/EcosystemSection'))
+const EducaSection = dynamic(() => import('./components/EducaSection'))
+const ImpactSection = dynamic(() => import('./components/ImpactSection'))
+const TechnologyFutureSection = dynamic(() => import('./components/TechnologyFutureSection'))
+const TimelineSection = dynamic(() => import('./components/TimelineSection'))
+const FinalStatementSection = dynamic(() => import('./components/FinalStatementSection'))
 
 export const metadata = {
   title: "Onesmite — Building the Digital Future of India",

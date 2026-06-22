@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useMemo, useEffect } from 'react'
+import { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
 import { useInView } from 'framer-motion'
 import * as THREE from 'three'
@@ -67,30 +67,11 @@ function BrainVines({ count = 250, maxDistance = 3.5 }) {
     ]
   }, [count, maxDistance])
 
-  // Track scroll position for dynamic interaction
-  const scrollY = useRef(0)
-  
-  useEffect(() => {
-    // Only run on client
-    scrollY.current = window.scrollY
-    const handleScroll = () => {
-      scrollY.current = window.scrollY
-    }
-    window.addEventListener('scroll', handleScroll, { passive: true })
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
-
-  useFrame((state, delta) => {
+  useFrame((state) => {
     if (groupRef.current) {
-      // Base rotation over time (gives a living, breathing feel)
-      const baseRotY = state.clock.elapsedTime * 0.05
-      
-      // Scroll-based dynamic rotation
-      const targetRotX = scrollY.current * 0.0005
-      const targetRotY = baseRotY + scrollY.current * 0.001
-      
-      groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetRotX, delta * 3)
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetRotY, delta * 3)
+      // Smooth continuous rotation over time without lerp/scroll jumps
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.05
+      groupRef.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.2) * 0.1
       
       // Add a slight floating / breathing effect
       groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.5

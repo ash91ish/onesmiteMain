@@ -3,10 +3,11 @@
 import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { MapPin, Quote } from 'lucide-react'
+import Image from 'next/image'
 
 const MISSION_POINTS = [
   'Technology without borders, built by people who understand this land.',
-  'From the heart of Bihar — proof that ambition and talent exist everywhere in India.',
+  'Engineering excellence that proves world-class talent is not confined to traditional tech hubs.',
   'Long-horizon thinking. Not chasing trends, but building infrastructure that endures.',
   'A commitment to make world-class technology a product of India, not just a service to it.',
 ]
@@ -65,7 +66,7 @@ export default function FounderSection() {
           style={{
             display: 'grid',
             gap: '4rem',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
             alignItems: 'start',
           }}
         >
@@ -75,47 +76,35 @@ export default function FounderSection() {
             animate={inView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.75, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             style={{ maxWidth: '380px' }}
+            itemScope
+            itemType="https://schema.org/Person"
           >
-            {/* Monogram avatar — placeholder until photo is added */}
+            <meta itemProp="worksFor" content="Onesmite" />
+            <meta itemProp="image" content="/ashish.webp" />
+            <meta itemProp="description" content="Ashish Kumar, Founder and CEO of Onesmite, leading sovereign digital infrastructure from Bihar, India." />
+            
+            {/* Founder Photo */}
             <div
               style={{
                 width: '180px',
                 height: '220px',
-                background: 'linear-gradient(145deg, var(--brand-deep) 0%, var(--brand) 100%)',
                 border: '2px solid rgba(2,62,105,0.25)',
                 borderRadius: '8px',
-                display: 'grid',
-                placeItems: 'center',
                 marginBottom: '1.75rem',
                 position: 'relative',
                 overflow: 'hidden',
                 boxShadow: '0 20px 60px rgba(2,62,105,0.2)',
+                background: 'var(--brand-deep)',
               }}
             >
-              {/* Decorative pattern */}
-              <div
-                aria-hidden="true"
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px)',
-                  backgroundSize: '20px 20px',
-                }}
+              <Image 
+                src="/ashish.webp" 
+                alt="Ashish Kumar - Founder & CEO of Onesmite" 
+                fill
+                sizes="180px"
+                style={{ objectFit: 'cover' }}
+                priority
               />
-              {/* Monogram */}
-              <span
-                style={{
-                  fontFamily: 'var(--font-syne)',
-                  fontSize: '4rem',
-                  fontWeight: 800,
-                  color: 'rgba(255,255,255,0.9)',
-                  letterSpacing: '-0.04em',
-                  position: 'relative',
-                  zIndex: 1,
-                }}
-              >
-                AK
-              </span>
               {/* Saffron corner accent */}
               <div
                 style={{
@@ -127,12 +116,14 @@ export default function FounderSection() {
                   background: 'var(--saffron)',
                   clipPath: 'polygon(100% 0, 0 100%, 100% 100%)',
                   opacity: 0.85,
+                  zIndex: 2,
                 }}
               />
             </div>
 
             {/* Name & title */}
             <h3
+              itemProp="name"
               style={{
                 fontFamily: 'var(--font-syne)',
                 fontSize: '1.5rem',
@@ -145,6 +136,7 @@ export default function FounderSection() {
               Ashish Kumar
             </h3>
             <p
+              itemProp="jobTitle"
               style={{
                 fontFamily: 'var(--font-jetbrains-mono)',
                 fontSize: '0.7rem',
@@ -159,6 +151,9 @@ export default function FounderSection() {
 
             {/* Location badge */}
             <div
+              itemProp="homeLocation"
+              itemScope
+              itemType="https://schema.org/Place"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -171,6 +166,7 @@ export default function FounderSection() {
             >
               <MapPin size={12} color="var(--brand)" />
               <span
+                itemProp="name"
                 style={{
                   fontFamily: 'var(--font-jetbrains-mono)',
                   fontSize: '0.65rem',

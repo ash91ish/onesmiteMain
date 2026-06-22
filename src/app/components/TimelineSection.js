@@ -3,8 +3,10 @@
 import { useRef, useState } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { BookOpen, Cpu, Brain, Globe2, Trophy } from 'lucide-react'
-import TimelineCanvas from './three/TimelineCanvas'
-import Timeline3DButtons from './three/Timeline3DButtons'
+import dynamic from 'next/dynamic'
+
+const TimelineCanvas = dynamic(() => import('./three/TimelineCanvas'), { ssr: false })
+const Timeline3DButtons = dynamic(() => import('./three/Timeline3DButtons'), { ssr: false })
 
 const STAGES = [
   {
